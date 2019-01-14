@@ -1,0 +1,462 @@
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"",
+"SHIPPING":"",
+"WEIGHT":"",
+"CATEGORY":"UNKNOWN",
+"TOTAL":"",
+"CATEGORYSTRING":""
+}
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"$24.44 - $179.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"9 ounce",
+"CATEGORY":"CLOTHES",
+"TOTAL":"745,000 VND",
+"CATEGORYSTRING":"| ||clothing, shoes & jewelry (||clothing, shoes & jewelry) | ||sports & outdoors > sports & fitness > exercise & fitness > running > footwear > men's > road running ||clothing, shoes & jewelry > men > shops"
+}
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"$24.44 - $179.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"9 ounce",
+"CATEGORY":"CLOTHES",
+"TOTAL":"745,000 VND",
+"CATEGORYSTRING":"| ||clothing, shoes & jewelry (||clothing, shoes & jewelry) | ||sports & outdoors > sports & fitness > exercise & fitness > running > footwear > men's > road running ||clothing, shoes & jewelry > men > shops"
+}
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"$24.44 - $179.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"9 ounce",
+"CATEGORY":"CLOTHES",
+"TOTAL":"745,000 VND",
+"CATEGORYSTRING":"| ||clothing, shoes & jewelry (||clothing, shoes & jewelry) | ||sports & outdoors > sports & fitness > exercise & fitness > running > footwear > men's > road running ||clothing, shoes & jewelry > men > shops"
+}
+error: uncaughtException: _response is not defined
+ReferenceError: _response is not defined
+    at Request._callback (D:\Dropbox\Public\Moon\Tool\moon-bot-skype\bot.js:40:38)
+    at Request.self.callback (D:\Dropbox\Public\Moon\Tool\moon-bot-skype\node_modules\request\request.js:185:22)
+    at Request.emit (events.js:182:13)
+    at Request.EventEmitter.emit (domain.js:441:20)
+    at Request.<anonymous> (D:\Dropbox\Public\Moon\Tool\moon-bot-skype\node_modules\request\request.js:1161:10)
+    at Request.emit (events.js:182:13)
+    at Request.EventEmitter.emit (domain.js:441:20)
+    at Gunzip.<anonymous> (D:\Dropbox\Public\Moon\Tool\moon-bot-skype\node_modules\request\request.js:1083:12)
+    at Object.onceWrapper (events.js:273:13)
+    at Gunzip.emit (events.js:187:15) {"error":{},"stack":"ReferenceError: _response is not defined\n    at Request._callback (D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\bot.js:40:38)\n    at Request.self.callback (D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\node_modules\\request\\request.js:185:22)\n    at Request.emit (events.js:182:13)\n    at Request.EventEmitter.emit (domain.js:441:20)\n    at Request.<anonymous> (D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\node_modules\\request\\request.js:1161:10)\n    at Request.emit (events.js:182:13)\n    at Request.EventEmitter.emit (domain.js:441:20)\n    at Gunzip.<anonymous> (D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\node_modules\\request\\request.js:1083:12)\n    at Object.onceWrapper (events.js:273:13)\n    at Gunzip.emit (events.js:187:15)","exception":true,"date":"Mon Jan 14 2019 09:10:01 GMT+0700 (Indochina Time)","process":{"pid":5400,"uid":null,"gid":null,"cwd":"D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v10.15.0","argv":["C:\\Program Files\\nodejs\\node.exe","D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\index.js"],"memoryUsage":{"rss":55820288,"heapTotal":35237888,"heapUsed":28088632,"external":143240}},"os":{"loadavg":[0,0,0],"uptime":399260},"trace":[{"column":38,"file":"D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\bot.js","function":"Request._callback","line":40,"method":"_callback","native":false},{"column":22,"file":"D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\node_modules\\request\\request.js","function":"Request.self.callback","line":185,"method":"callback","native":false},{"column":13,"file":"events.js","function":"Request.emit","line":182,"method":"emit","native":false},{"column":20,"file":"domain.js","function":"Request.EventEmitter.emit","line":441,"method":"emit","native":false},{"column":10,"file":"D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\node_modules\\request\\request.js","function":null,"line":1161,"method":null,"native":false},{"column":13,"file":"events.js","function":"Request.emit","line":182,"method":"emit","native":false},{"column":20,"file":"domain.js","function":"Request.EventEmitter.emit","line":441,"method":"emit","native":false},{"column":12,"file":"D:\\Dropbox\\Public\\Moon\\Tool\\moon-bot-skype\\node_modules\\request\\request.js","function":null,"line":1083,"method":null,"native":false},{"column":13,"file":"events.js","function":"Object.onceWrapper","line":273,"method":"onceWrapper","native":false},{"column":15,"file":"events.js","function":"Gunzip.emit","line":187,"method":"emit","native":false}]}
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"$24.44 - $179.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"9 ounce",
+"CATEGORY":"CLOTHES",
+"TOTAL":"745,000 VND",
+"CATEGORYSTRING":"| ||clothing, shoes & jewelry (||clothing, shoes & jewelry) | ||sports & outdoors > sports & fitness > exercise & fitness > running > footwear > men's > road running ||clothing, shoes & jewelry > men > shops"
+}
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"$24.44 - $179.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"9 ounce",
+"CATEGORY":"CLOTHES",
+"TOTAL":"745,000 VND",
+"CATEGORYSTRING":"| ||clothing, shoes & jewelry (||clothing, shoes & jewelry) | ||sports & outdoors > sports & fitness > exercise & fitness > running > footwear > men's > road running ||clothing, shoes & jewelry > men > shops"
+}
+info: {
+"URL":"https://www.amazon.com/Saucony-Kinvara-Shoe-Grey-Black/dp/B01MCWA8VK/ref=sr_1_2?s=fashion-mens-intl-ship&ie=UTF8&qid=1547430693&sr=1-2",
+"PRICE":"$24.44 - $179.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"9 ounce",
+"CATEGORY":"CLOTHES",
+"TOTAL":"745,000 VND",
+"CATEGORYSTRING":"| ||clothing, shoes & jewelry (||clothing, shoes & jewelry) | ||sports & outdoors > sports & fitness > exercise & fitness > running > footwear > men's > road running ||clothing, shoes & jewelry > men > shops"
+}
+info: {
+"URL":"https://www.amazon.com/Veken-Stainless-Screens-Resistant-Borosilicate/dp/B07FCLBRTZ/ref=sr_1_7_sspa?s=kitchen-intl-ship&ie=UTF8&qid=1547430697&sr=1-7-spons&psc=1",
+"PRICE":"$27.99",
+"SHIPPING":"	
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+",
+"WEIGHT":"2.38 pound",
+"CATEGORY":"GENERAL",
+"TOTAL":"1,005,000 VND",
+"CATEGORYSTRING":"| ||kitchen & dining (||kitchen & dining) ||home & kitchen > kitchen & dining > coffee, tea & espresso > coffee makers > french presses"
+}

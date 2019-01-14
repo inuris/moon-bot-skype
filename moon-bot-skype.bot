@@ -1,0 +1,15 @@
+{
+    "name": "moon-bot-skype",
+    "services": [
+        {
+            "type": "endpoint",
+            "name": "development",
+            "endpoint": "http://localhost:3978/api/messages",
+            "appId": "87d4460f-ec5b-42e0-9780-eb0b4aa613db",
+            "appPassword": "soqNSJ1|nibsTECX0967-~$",
+            "id": "1"
+        }
+    ],
+    "padlock": "",
+    "version": "2.0"
+}
