@@ -43,7 +43,8 @@ class MyBot {
                     })
                     return turnContext.sendActivity(message);                   
                 }
-                return turnContext.sendActivity("Ko hỗ trợ báo giá từ web này");                          
+                if (website.isUrl === true)
+                    return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite());                          
             } 
             else {
                 //await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
