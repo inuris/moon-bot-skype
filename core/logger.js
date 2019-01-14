@@ -4,14 +4,14 @@ const winston = require('winston');
 const options = {
   infofile: {
     level: 'info',
-    filename: './info.txt',
+    filename: './logs/info.txt',
     handleExceptions: true,
     json: true,
     colorize: false
   },
   errorfile: {
     level: 'error',
-    filename: './error.txt',
+    filename: './logs/error.txt',
     handleExceptions: true,
     json: true,
     colorize: false
