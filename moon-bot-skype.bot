@@ -3,10 +3,10 @@
     "services": [
         {
             "type": "endpoint",
-            "name": "development",
+            "name": "production",
             "endpoint": "https://moonbaogia.azurewebsites.net/api/messages",
-            "appId": "87d4460f-ec5b-42e0-9780-eb0b4aa613db",
-            "appPassword": "soqNSJ1|nibsTECX0967-~$",
+            "appId": "783213ff-c069-4022-a899-8efd06be814c",
+            "appPassword": "hunENPC1+%%vwuaKMA0259{",
             "id": "1"
         }
     ],
