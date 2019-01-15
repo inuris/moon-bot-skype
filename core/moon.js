@@ -664,7 +664,7 @@ class Website{
       }
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
-          this.setHtmlRaw(body);  
+          this.htmlraw=body;  
           var item = new Item(this);                 
           // Log to file
           var logtype='info';
