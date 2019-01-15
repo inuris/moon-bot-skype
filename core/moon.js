@@ -2,7 +2,7 @@
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const request = require("request");
-const logger = require('logger.js').logger;
+const logger = require('./logger.js').logger;
 const RATE = {
   'USD': 24000,
   'EUR': 30000
