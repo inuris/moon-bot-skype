@@ -28,8 +28,10 @@ class MyBot {
                             gzip: true
                         };
                         if (website.cookie !== null){
+                            console.log(website.cookie);
+                            var cookie = request.cookie(website.cookie);
                             requestOptions.headers = {
-                                'Cookie': request.cookie(website.cookie)
+                                'Cookie': cookie
                             };
                             requestOptions.jar = true;
                             console.log(requestOptions.headers);
