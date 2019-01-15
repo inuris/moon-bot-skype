@@ -293,6 +293,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
+    COOKIE:"session_id=132-6976864-4151716",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
@@ -612,6 +613,7 @@ class Website{
     var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
+    var tempCookie="";
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
@@ -619,16 +621,19 @@ class Website{
         if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
           tempUrl = tempMatch[0];          
           tempWeb = WEBSITES[web];
+          if (WEBSITES[web].COOKIE !== undefined) 
+            tempCookie=WEBSITES[web].COOKIE;
           break;
         }          
       }
     }
     if (tempWeb!==null){
       found = true;            
-    }      
+    }
     this.url=tempUrl;
     this.isUrl=isUrl;
     this.att=tempWeb;
+    this.cookie=tempCookie;
     this.htmlraw="";
     this.found = found;  
   }

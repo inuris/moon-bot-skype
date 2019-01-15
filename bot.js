@@ -21,12 +21,17 @@ class MyBot {
                 var website= new Website(turnContext.activity.text);
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
-                    const message = await new Promise(resolve => {
+                    const message = await new Promise(resolve => {                        
                         var requestOptions = {
                             method: "GET",
                             url: website.url,
                             gzip: true
                         };
+                        if (website.cookie !== undefined){
+                            requestOptions.headers = {
+                                'Cookie': request.cookie(website.cookie)
+                            };
+                        }
                         request(requestOptions, function(error, response, body) {
                             // Đưa html raw vào website
                             website.setHtmlRaw(body);  
