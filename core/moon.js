@@ -613,7 +613,7 @@ class Website{
     var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
-    var tempCookie="";
+    var tempCookie = null;
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;

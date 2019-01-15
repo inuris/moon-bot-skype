@@ -27,7 +27,7 @@ class MyBot {
                             url: website.url,
                             gzip: true
                         };
-                        if (website.cookie !== undefined){
+                        if (website.cookie !== null){
                             requestOptions.headers = {
                                 'Cookie': request.cookie(website.cookie)
                             };
