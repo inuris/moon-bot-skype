@@ -19,7 +19,7 @@ class MyBot {
                 var website= new Website(turnContext.activity.text);
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
-                    var message = website.getResponse();
+                    var message = Wbsite.getResponse(website);
                     return turnContext.sendActivity(message);                   
                 }
                 if (website.isUrl === true)
