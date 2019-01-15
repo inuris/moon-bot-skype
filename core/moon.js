@@ -589,18 +589,23 @@ class Price{
     this.value = 0;
   }
   setPrice(priceString, reg){
-    this.string = priceString;
+    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim()        
-                                .replace(/\$\s*|,/gm, "")
+                                .trim();
+    this.string = tempString;
+    tempString = tempString.replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){      
         var tempMatch = tempString.match(reg)
         if (tempMatch!=null){
           tempString=tempMatch[0];
         }   
-    }    
-    this.value=(tempString!==""?parseFloat(tempString):0);
+    } 
+    var value = parseFloat(tempString);
+    if (isNaN(value)){
+      value = 0;
+    }
+    this.value = value;
   }
   static getPriceShipping(price, ship){
     return price.value + ship.value;

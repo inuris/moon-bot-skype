@@ -27,20 +27,18 @@ class MyBot {
                             url: website.url,
                             gzip: true
                         };
+                        // Nếu website cần Cookie thì set
                         if (website.cookie !== null){
-                            console.log(website.cookie);
                             var cookie = request.cookie(website.cookie);
                             requestOptions.headers = {
                                 'Cookie': cookie
                             };
                             requestOptions.jar = true;
-                            console.log(requestOptions.headers);
                         }
                         request(requestOptions, function(error, response, body) {
                             // Đưa html raw vào website
                             website.setHtmlRaw(body);  
-                            var item = new Item(website); 
-                
+                            var item = new Item(website);                 
                             // Log to file
                             var logtype='info';
                             if (item.weight.value===0 || item.category.ID === "UNKNOWN") {logtype='error';}
