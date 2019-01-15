@@ -4,7 +4,6 @@
 const { ActivityTypes } = require('botbuilder');
 
 const Website = require("./core/moon.js").Website;
-const Item = require("./core/moon.js").Item;
 // Imports dependencies and set up http server
 
 class MyBot {
@@ -19,7 +18,7 @@ class MyBot {
                 var website= new Website(turnContext.activity.text);
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
-                    var message = Website.getResponse(website);
+                    var message = await Website.getResponse(website);
                     return turnContext.sendActivity(message);                   
                 }
                 if (website.isUrl === true)
