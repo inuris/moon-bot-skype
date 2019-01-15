@@ -293,7 +293,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
-    COOKIE:"session_id=132-6976864-4151716",
+    COOKIE:"session-id=132-6976864-4151716",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
