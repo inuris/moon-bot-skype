@@ -293,7 +293,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
-    COOKIE:"session-id=132-6976864-4151716",
+    COOKIE:"session-id=138-3891283-2705352;session-id-time=2082787201l;session-token=yf3etUt4SsXN0YDmBxz46oxjSdR90Zcn/KoAK0wkJN+cKipi3ECv45o36nP4nt8bXSBjky3Io6pcY57WOX/ZwX7rlmRryJKKxEncp51SiVXa17ncWZ2TOhm2Bii72TVP9sUXSC9P2mJ0eCa1XOVN+a/Dx87NXJUi4Jnb74MsokIIR88aSyzS4fMcu4CcBy/J",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
