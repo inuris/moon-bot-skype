@@ -647,7 +647,7 @@ class Website{
   setHtmlRaw(htmlraw){
     this.htmlraw=htmlraw;
   }
-  async getResponse(){
+  async getResponse(target){
     const message = await new Promise(resolve => {                        
       var requestOptions = {
           method: "GET",
@@ -668,10 +668,15 @@ class Website{
           var item = new Item(this);                 
           // Log to file
           var logtype='info';
-          if (item.weight.value===0 || item.category.ID === "UNKNOWN") {logtype='error';}
-            logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', this.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
-  
+          if (item.weight.value===0 || item.category.ID === "UNKNOWN") {
+            logtype='error';
+          }
+          logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', this.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
           var _response= item.toText();
+          if (target === 'facebook')
+            _response = item.toFBResponse();
+          else
+            _response = item.toText();
           resolve(_response);             
       });  
     })
