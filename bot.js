@@ -32,6 +32,7 @@ class MyBot {
                                 'Cookie': request.cookie(website.cookie)
                             };
                             requestOptions.jar = true;
+                            console.log(requestOptions.headers);
                         }
                         request(requestOptions, function(error, response, body) {
                             // Đưa html raw vào website
