@@ -293,7 +293,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
-    COOKIE:"session-id=139-2714540-8583550;session-id-time=2082787201l;session-token=Q8SiOlD8dzAC4LPcvCWuLAAPC2cPz71IwO4OumosjFZP+AejP67W4OHnXC6bj88p/zA9z8iumvAbJDvAXlWiUEzRFblfo7ege8I/5LlRZMHV1hHswSc2toddSk8db3TxTD5bcQ19MFsArpPWOqlERxVUUZqKbBllra25C7EBUYgpKSjre/Ng0stbzmkjH3nnWAIE8ry1XNEZ8hJRk0xqA/b2Fmnvw3WEKEDTU06hvhbLEHQeYNXg0tWgK+WNJlih535XStDy0SY=;ubid-main=131-3996828-8434559",
+    COOKIE:"session-id=145-0181747-4095778; session-id-time=2082787201l; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9;ubid-main=130-5429414-6939308;",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
