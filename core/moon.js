@@ -352,10 +352,11 @@ const WEBSITES = {
   },
   CARTERS: {
     TAX: 0.083,
-    MATCH: "carters",
+    MATCH: "carters.com",
     NAME: "Carters",
-    PRICEBLOCK:
+    PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
+    ]
   },
   CLINIQUE: {
     TAX: 0.083,
