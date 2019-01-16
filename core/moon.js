@@ -472,7 +472,8 @@ class Parser{
       var scriptBlock = select(dom, 'script');
       for (var i = from;i<scriptBlock.length; i++){
         if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
-          var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));        
+          var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
+          console.log(json);      
           return jp.query(json,jsonpath); 
         }        
       }
