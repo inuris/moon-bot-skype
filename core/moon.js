@@ -432,6 +432,12 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "vitacost.com"
   },
+  ZARAES:{
+    TAX: 0,
+    RATE: 30000,
+    MATCH: "zara.com/es",
+    JSONBLOCK: "$.offers.price"
+  },
   ZULILY: {
     TAX: 0,
     MATCH: "zulily.com"
