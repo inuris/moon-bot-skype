@@ -361,7 +361,7 @@ const WEBSITES = {
   },
   FOREVER21: {
     TAX: 0.083,
-    MATCH: "forever21",
+    MATCH: "forever21.com",
     NAME: "Forever21",
     PRICEBLOCK: ['#ItemPrice']
   },
