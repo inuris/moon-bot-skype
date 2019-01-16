@@ -762,7 +762,7 @@ class Item{
           price.setPrice(priceString);          
         }
         else if (website.att.JSONBLOCK!==undefined){
-          var priceString = myparser.getJSON(website.att.JSONBLOCK); 
+          var priceString = myparser.getJSON(website.att.JSONBLOCK).toString(); 
           price.setPrice(priceString);
         }
 
