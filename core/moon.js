@@ -653,7 +653,7 @@ class Website{
   constructor(url){    
     var found=false;
     var isUrl=false;
-    var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w-;,.\/?%&=]*)?/i;
+    var reg=/((?:(?:http|https):\/\/)?(?:\w*\.\w+\.\w+)(?:\.\w+)?)+([\w-;,.\/?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
     var tempDomain="";
@@ -665,6 +665,8 @@ class Website{
         if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
           tempUrl = tempMatch[0]; 
           tempDomain = tempMatch[1];
+          if (tempDomain.indexOf('http')!==0)
+            tempDomain="https://"+tempDomain;
           tempWeb = WEBSITES[web];
           if (WEBSITES[web].COOKIE !== undefined) 
             tempCookie=WEBSITES[web].COOKIE;
@@ -753,7 +755,7 @@ class Item{
         if (website.att.PRICE3RDBLOCK!==undefined){
           var newurl = myparser.getLink(website.att.PRICE3RDBLOCK);
           if (newurl!=="")
-            redirect = website.domain+newurl;
+            redirect = website.domain + newurl;            
         }
 
         var weight = new AmazonWeight();
