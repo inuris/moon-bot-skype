@@ -365,7 +365,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "forever21.com",
     NAME: "Forever21",
-    JSONBLOCK: ['$.Offers.price']
+    JSONBLOCK: "$.Offers.price"
   },
   FRAGRANCENET: {
     TAX: 0,
