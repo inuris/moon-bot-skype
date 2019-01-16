@@ -3,6 +3,8 @@ const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const request = require("request");
 const logger = require('./logger.js').logger;
+const jp = require('jsonpath');
+
 const RATE = {
   'USD': 24000,
   'EUR': 30000
@@ -363,7 +365,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "forever21.com",
     NAME: "Forever21",
-    PRICEBLOCK: ['#ItemPrice']
+    JSONBLOCK: ['$.Offers.price']
   },
   FRAGRANCENET: {
     TAX: 0,
@@ -464,6 +466,21 @@ Number.prototype.toVND = function(rate){
 class Parser{
   constructor(dom){
     this.dom=dom;
+  }
+  getJSON(jsonpath, from = 0){
+    try{
+      var scriptBlock = select(dom, 'script');
+      for (var i = from;i<scriptBlock.length; i++){
+        if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
+          var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));        
+          return jp.query(json,jsonpath); 
+        }        
+      }
+      return "";
+    }
+    catch(e){
+      return "";
+    }
   }
   getLink(blockElementArray, index = 0){
     try{
@@ -742,6 +759,10 @@ class Item{
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK); 
           price.setPrice(priceString);          
+        }
+        else if (website.att.JSONBLOCK!==undefined){
+          var priceString = myparser.getJSON(website.att.JSONBLOCK); 
+          price.setPrice(priceString);
         }
 
         var shipping=new Price();
