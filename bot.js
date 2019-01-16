@@ -19,7 +19,12 @@ class MyBot {
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
                     var message = await Website.getResponse(website);
-                    return turnContext.sendActivity(message);                   
+                    if (message.redirect!=="")
+                    {
+                        website= new Website(message.redirect);
+                        message = await Website.getResponse(website);
+                    }
+                    return turnContext.sendActivity(message.toText());                   
                 }
                 if (website.isUrl === true)
                     return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite());                          

@@ -627,14 +627,13 @@ class Price{
     this.string = "";
     this.value = 0;
   }
-  setPrice(priceString, reg){
-    
+  setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
                                 .trim();
     this.string = tempString;
     tempString = tempString.replace(/\$\s*|,/gm, "")
                                 .replace(" ", ".");
-    if (reg !== undefined){      
+    if (reg !== undefined){
         var tempMatch = tempString.match(reg)
         if (tempMatch!=null){
           tempString=tempMatch[0];
@@ -654,16 +653,18 @@ class Website{
   constructor(url){    
     var found=false;
     var isUrl=false;
-    var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w- ;,./?%&=]*)?/i;
+    var reg=/(?:(?:http|https):\/\/)?(\w*\.\w+\.\w+(?:\.\w+)?)+([\w-;,.\/?%&=]*)?/i;
     var tempWeb = null;
     var tempUrl = "";
+    var tempDomain="";
     var tempCookie = null;
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
       for (var web in WEBSITES){             
-        if(tempMatch[1].indexOf(WEBSITES[web].MATCH)>=0){
-          tempUrl = tempMatch[0];          
+        if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
+          tempUrl = tempMatch[0]; 
+          tempDomain = tempMatch[1];
           tempWeb = WEBSITES[web];
           if (WEBSITES[web].COOKIE !== undefined) 
             tempCookie=WEBSITES[web].COOKIE;
@@ -674,6 +675,7 @@ class Website{
     if (tempWeb!==null){
       found = true;            
     }
+    this.domain = tempDomain;
     this.url=tempUrl;
     this.isUrl=isUrl;
     this.att=tempWeb;
@@ -681,7 +683,7 @@ class Website{
     this.htmlraw="";
     this.found = found;  
   }
-  setHtmlRaw(htmlraw){
+  setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
   static async getResponse(website, bottype){
@@ -701,29 +703,15 @@ class Website{
       }
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
-          website.setHtmlRaw(body);  
-          var item = new Item(website);
-
-          // Nếu link Amazon ko tìm thấy giá thì có thể là link 3rd Sellers
-          if (item.price.value === 0 && item.att.NAME==="Amazon"){
-            var redirect= new Website(item.redirect);
-            var message = await Website.getResponse(redirect , bottype);
-            resolve(message);
+          website.setDom(body);  
+          var item = new Item(website);         
+          // Log to file
+          var logtype='info';
+          if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
+            logtype='error';
           }
-          else{
-            // Log to file
-            var logtype='info';
-            if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
-              logtype='error';
-            }
-            logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
-            var _response= item.toText();
-            if (bottype === 'facebook')
-              _response = item.toFBResponse();
-            else
-              _response = item.toText();
-            resolve(_response); 
-          }            
+          logger.log(logtype,'{\n"URL":"%s",\n"PRICE":"%s",\n"SHIPPING":"%s",\n"WEIGHT":"%s",\n"CATEGORY":"%s",\n"TOTAL":"%s",\n"CATEGORYSTRING":"%s"\n}', website.url, item.price.string, item.shipping.string,item.weight.current,item.category.att.ID,item.totalString,item.category.string);
+          resolve(item);
       });  
     })
     return message;
@@ -763,7 +751,9 @@ class Item{
         
         var redirect="";
         if (website.att.PRICE3RDBLOCK!==undefined){
-          redirect = myparser.getLink(website.att.PRICE3RDBLOCK);
+          var newurl = myparser.getLink(website.att.PRICE3RDBLOCK);
+          if (newurl!=="")
+            redirect = website.domain+newurl;
         }
 
         var weight = new AmazonWeight();
