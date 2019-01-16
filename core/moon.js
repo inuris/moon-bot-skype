@@ -436,7 +436,7 @@ const WEBSITES = {
     TAX: 0,
     RATE: 30000,
     MATCH: "zara.com/es",
-    JSONBLOCK: "$.offers.price"
+    JSONBLOCK: "$.offers[0].price"
   },
   ZULILY: {
     TAX: 0,
