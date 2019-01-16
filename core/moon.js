@@ -469,7 +469,7 @@ class Parser{
   }
   getJSON(jsonpath, from = 0){
     try{
-      var scriptBlock = select(dom, 'script');
+      var scriptBlock = select(this.dom, 'script');
       for (var i = from;i<scriptBlock.length; i++){
         if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
           var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
