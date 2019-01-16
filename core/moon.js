@@ -475,16 +475,20 @@ class Parser{
     this.dom=dom;
   }
   // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
-  // Default sẽ lấy toàn bộ các script từ [0], nếu có from sẽ lấy từ [from]
+  // Default sẽ lấy script đầu tiên, nếu cần lấy cái thứ n thì đổi index 
   // Lấy ra element theo JSONPath của web.JSONBLOCK
-  getJSON(jsonpath, from = 0){
+  getJSON(jsonpath, index = 1){
     try{
+      var count=1;
       var scriptBlock = select(this.dom, 'script');
-      for (var i = from;i<scriptBlock.length; i++){
+      for (var i = 0;i<scriptBlock.length; i++){
         if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
-          var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
-          console.log(json);      
-          return jp.query(json,jsonpath); 
+          count++;
+          if (count>index){
+            var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
+            console.log(json);      
+            return jp.query(json,jsonpath);
+          }
         }        
       }
       return "";
