@@ -707,7 +707,7 @@ class Website{
           // Nếu link Amazon ko tìm thấy giá thì có thể là link 3rd Sellers
           if (item.price.value === 0 && item.att.NAME==="Amazon"){
             var redirect= new Website(item.redirect);
-            var message = await getResponse(redirect , bottype);
+            var message = await Website.getResponse(redirect , bottype);
             resolve(message);
           }
           else{
