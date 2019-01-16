@@ -434,7 +434,7 @@ const WEBSITES = {
   },
   ZARAES:{
     TAX: 0,
-    RATE: 30000,
+    RATE: 'EUR',
     NAME: 'Zara ES',
     MATCH: "zara.com/es",
     JSONBLOCK: "$[0].offers.price"
