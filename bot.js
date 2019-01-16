@@ -19,7 +19,8 @@ class MyBot {
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
                     var message = await Website.getResponse(website);
-                    if (message.redirect!=="")
+                    // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+                    if (message.price==0 && message.redirect!=="")
                     {
                         website= new Website(message.redirect);
                         message = await Website.getResponse(website);
