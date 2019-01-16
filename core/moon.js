@@ -326,7 +326,7 @@ const WEBSITES = {
       ".offer-price",
       "#alohaPricingWidget .a-color-price"
     ],
-    PRICE3RDBLOCK:[
+    REDIRECT:[
       "#availability a"
     ],
     SHIPPINGBLOCK: [
@@ -467,6 +467,9 @@ class Parser{
   constructor(dom){
     this.dom=dom;
   }
+  // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
+  // Default sẽ lấy toàn bộ các script từ [0], nếu có from sẽ lấy từ [from]
+  // Lấy ra element theo JSONPath của web.JSONBLOCK
   getJSON(jsonpath, from = 0){
     try{
       var scriptBlock = select(this.dom, 'script');
@@ -483,6 +486,8 @@ class Parser{
       return "";
     }
   }
+
+  // Lấy ra link href trong thẻ <a>, từ danh sách các block chứa link web.REDIRECT
   getLink(blockElementArray, index = 0){
     try{
       for (var i = 0; i < blockElementArray.length; i++) {          
@@ -497,6 +502,7 @@ class Parser{
       return "";
     }
   }
+  // Lấy ra plain text từ các array các block
   getText(blockElementArray, index = 0){
     try{    
       for (var i = 0; i < blockElementArray.length; i++) {          
@@ -513,6 +519,8 @@ class Parser{
     }
     
   }
+
+  // Lấy ra array text từ 1 bảng <td> hoặc <li>
   getTextArray(blockElementArray){
     try{
       var textArray=[];
@@ -774,8 +782,8 @@ class Item{
         }
         
         var redirect="";
-        if (website.att.PRICE3RDBLOCK!==undefined){
-          var newurl = myparser.getLink(website.att.PRICE3RDBLOCK);
+        if (website.att.REDIRECT!==undefined){
+          var newurl = myparser.getLink(website.att.REDIRECT);
           if (newurl!=="")
             redirect = website.domain + newurl;            
         }
