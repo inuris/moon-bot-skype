@@ -475,7 +475,7 @@ class Parser{
       }  
       return "";
     }
-    catch{
+    catch(e){
       return "";
     }
   }
@@ -490,7 +490,7 @@ class Parser{
       }
       return "";
     }
-    catch{
+    catch(e){
       return "";
     }
     
@@ -521,7 +521,7 @@ class Parser{
       }    
       return null;
     }
-    catch{
+    catch(e){
       return null;
     }
   }
@@ -683,10 +683,6 @@ class Website{
   }
   setHtmlRaw(htmlraw){
     this.htmlraw=htmlraw;
-  }
-  static async redirect(url){
-    
-
   }
   static async getResponse(website, bottype){
     const message = await new Promise(resolve => {                        
