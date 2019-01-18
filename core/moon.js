@@ -495,7 +495,7 @@ class Parser{
           count++;
           if (count>index){
             var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
-            //console.log(json);      
+            console.log(json);      
             return jp.query(json,jsonpath).toString();
           }
         }        
