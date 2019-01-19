@@ -358,8 +358,8 @@ const WEBSITES = {
   },
   CROCS:{
     TAX: 0.083,
-    MATCH: "forever21.com",
-    NAME: "Forever21",
+    MATCH: "crocs.com",
+    NAME: "Crocs",
     JSONBLOCK:{
       INDEX: 2,
       REGEX: /\{.+\}/gm,
