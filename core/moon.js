@@ -814,9 +814,11 @@ class Item{
 
         var weight = new AmazonWeight();
         var category=new AmazonCategory();
-        if (recentitem!==undefined){
-          weight = recentitem.weight;
-          category = recentitem.category;
+        if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+          if (recentitem.weight.kg!==0)
+            weight = recentitem.weight;
+          if (recentitem.category.string!==0)
+            category = recentitem.category;
         }
         else if (website.att.DETAILBLOCK!==undefined){
           // detailArray gồm nhiều row trong table chứa Detail
