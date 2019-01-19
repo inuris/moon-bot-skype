@@ -401,15 +401,27 @@ const WEBSITES = {
   },
   OSHKOSH: {
     TAX: 0.083,
-    MATCH: "oshkosh.com"
+    MATCH: "oshkosh.com",
+    NAME: "OshKosh",
+    PRICEBLOCK:[
+      '.product-price-container .price-sales-usd'
+    ]
   },
   RALPHLAUREN: {
     TAX: 0.083,
     MATCH: "ralphlauren.com"
-  },
+  },  
   RUELALA: {
     TAX: 0,
     MATCH: "reulala.com"
+  },
+  SKIPHOP: {
+    TAX: 0.083,
+    MATCH: "skiphop.com",
+    NAME: "SkipHop",
+    PRICEBLOCK:[
+      '.product-price-container .price-sales-usd'
+    ]
   },
   THEBODYSHOP: {
     TAX: 0.083,
