@@ -38,7 +38,7 @@ class MyBot {
                 }                         
             } 
             else {
-                //await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
+                await turnContext.sendActivity(`Gõ !list để xem các web hỗ trợ`);
             } 
         };       
         await response(turnContext);
