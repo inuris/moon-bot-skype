@@ -299,10 +299,6 @@ const WEBSITES = {
       ".product-price .price-msrp"
     ]
   },
-  ALDO: {
-    TAX: 0.083,
-    MATCH: "aldoshoes"
-  },
   AMAZON3RD:{
     TAX: 0.083,
     MATCH: "amazon.com/gp/offer-listing",
@@ -343,14 +339,6 @@ const WEBSITES = {
       "#ourprice_shippingmessage"
     ]
   },
-  BATHBODYWORKS: {
-    TAX: 0.083,
-    MATCH: "bathandbodyworks"
-  },
-  BHCOSMETICS: {
-    TAX: 0,
-    MATCH: "bhcosmetics"
-  },
   BHPHOTOVIDEO: {
     TAX: 0,
     MATCH: "bhphotovideo.com",
@@ -368,81 +356,82 @@ const WEBSITES = {
       '.product-price-container .price-sales-usd'
     ]
   },
-  CLINIQUE: {
+  CROCS:{
     TAX: 0.083,
-    MATCH: "clinique"
+    MATCH: "forever21.com",
+    NAME: "Forever21",
+    JSONBLOCK:{
+      INDEX: 2,
+      REGEX: /\{.+\}/gm,
+      PATH: "$.productValue"
+    } 
   },
   FOREVER21: {
     TAX: 0.083,
     MATCH: "forever21.com",
     NAME: "Forever21",
-    JSONBLOCK: "$.Offers.price"
+    JSONBLOCK:{
+      INDEX: 29,
+      PATH: "$.Offers.price"
+    } 
   },
-  FRAGRANCENET: {
-    TAX: 0,
-    MATCH: "fragrancenet.com"
-  },
-  ATHLETA: {
-    TAX: 0.083,
-    MATCH: "athleta.gap.com",
-    NAME: "Athleta",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  BANANAREPUBLIC: {
-    TAX: 0.083,
-    MATCH: "bananarepublic.gap.com",
-    NAME: "BananaRepublic",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  HILLCITY: {
-    TAX: 0.083,
-    MATCH: "hillcity.gap.com",
-    NAME: "HillCity",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  OLDNAVY: {
-    TAX: 0.083,
-    MATCH: "oldnavy.gap.com",
-    NAME: "OldNavy",
-    JSONBLOCK:"$.offers[0].price"
-  },
+      // Subdomain của GAP
+      ATHLETA: {
+        TAX: 0.083,
+        MATCH: "athleta.gap.com",
+        NAME: "Athleta",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: "$[0].offers[0].price"
+        }
+      },
+      BANANAREPUBLIC: {
+        TAX: 0.083,
+        MATCH: "bananarepublic.gap.com",
+        NAME: "BananaRepublic",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: "$[0].offers[0].price"
+        }
+      },
+      HILLCITY: {
+        TAX: 0.083,
+        MATCH: "hillcity.gap.com",
+        NAME: "HillCity",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: "$[0].offers[0].price"
+        }
+      },
+      OLDNAVY: {
+        TAX: 0.083,
+        MATCH: "oldnavy.gap.com",
+        NAME: "OldNavy",
+        JSONBLOCK:{
+          INDEX: 0,
+          PATH: "$.offers[0].price"
+        }
+      },
   GAP: {
     TAX: 0.083,
     MATCH: "gap.com",
     NAME: "GAP",
-    JSONBLOCK:"$[0].offers[0].price"
-  },
-  HM: {
-    TAX: 0.083,
-    MATCH: "hm.com"
-  },
-  JOMASHOP: {
-    TAX: 0,
-    MATCH: "jomashop.com"
-  },
-  LOFT: {
-    TAX: 0.083,
-    MATCH: "loft.com"
+    JSONBLOCK:{
+      INDEX: 0,
+      PATH: "$[0].offers[0].price"
+    }
   },
   NINEWEST: {
     TAX: 0.083,
     MATCH: "ninewest.com"
   },
-    OSHKOSH: {
+  OSHKOSH: {
     TAX: 0.083,
     MATCH: "oshkosh.com",
     NAME: "OshKosh",
     PRICEBLOCK:[
       '.product-price-container .price-sales-usd'
     ]
-  },
-  RALPHLAUREN: {
-    TAX: 0.083,
-    MATCH: "ralphlauren.com"
-  },  
-  RUELALA: {
-    TAX: 0,
-    MATCH: "reulala.com"
   },
   SKIPHOP: {
     TAX: 0.083,
@@ -468,21 +457,23 @@ const WEBSITES = {
       ".prod-PriceHero .price-group"
     ]
   },
-  VITACOST: {
-    TAX: 0,
-    MATCH: "vitacost.com"
-  },
   ZARAUS:{
     TAX: 0,
     NAME: 'Zara',
     MATCH: "zara.com/us",
-    JSONBLOCK: "$[0].offers.price"
+    JSONBLOCK:{
+      INDEX: 16,
+      PATH: "$[0].offers.price"
+    }
   },
   ZARAES:{
     TAX: 0,
     RATE: 'EUR',
     MATCH: "zara.com/es",
-    JSONBLOCK: "$[0].offers.price"
+    JSONBLOCK:{
+      INDEX: 16,
+      PATH: "$[0].offers.price"
+    }
   },
   ZULILY: {
     TAX: 0,
@@ -523,20 +514,20 @@ class Parser{
   // Lấy ra đoạn JSON từ thẻ <script type='application/ld+json'
   // Default sẽ lấy script đầu tiên, nếu cần lấy cái thứ n thì đổi index 
   // Lấy ra element theo JSONPath của web.JSONBLOCK
-  getJSON(jsonpath, index = 1){
+  getJSON(jsonblock){
     try{
-      var count=1;
       var scriptBlock = select(this.dom, 'script');
-      for (var i = 0;i<scriptBlock.length; i++){
-        if (scriptBlock[i].attribs !== undefined && scriptBlock[i].attribs.type !== undefined && scriptBlock[i].attribs.type === 'application/ld+json'){
-          count++;
-          if (count>index){
-            var json = JSON.parse(htmlparser.DomUtils.getText(scriptBlock[i]));  
-            console.log(json);      
-            return jp.query(json,jsonpath).toString();
-          }
-        }        
-      }
+      if (scriptBlock.length>jsonblock.INDEX){
+        var html = htmlparser.DomUtils.getText(scriptBlock[jsonblock.INDEX])
+        if (jsonblock.REGEX !== undefined){
+          var matchhtml = html.match(jsonblock.REGEX);
+          if (matchhtml.length>0)
+            html = matchhtml[0];
+        }
+        var json = JSON.parse(html);
+        //console.log(json);      
+        return jp.query(json,jsonblock.PATH).toString();
+      }  
       return "";
     }
     catch(e){
