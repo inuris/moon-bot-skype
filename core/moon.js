@@ -737,8 +737,8 @@ class Website{
   setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-  static async getResponse(website, bottype){
-    const message = await new Promise(resolve => {                        
+  static async getItem(website, item){
+    const item = await new Promise(resolve => {                        
       var requestOptions = {
           method: "GET",
           url: website.url,
@@ -755,7 +755,7 @@ class Website{
       request(requestOptions, function(error, response, body) {
           // Đưa html raw vào website
           website.setDom(body);  
-          var item = new Item(website);         
+          var item = new Item(website, item);         
           // Log to file
           var logtype='info';
           if (item.weight.value === 0 || item.category.ID === "UNKNOWN") {
@@ -765,7 +765,8 @@ class Website{
           resolve(item);
       });  
     })
-    return message;
+    // trả về Item type, tùy vào nhu cầu sẽ lấy item.toText() hoặc item.toFBResponse()
+    return item;
   }
   static getAvailableWebsite(){
     var listweb = "";
@@ -780,7 +781,7 @@ class Website{
   
 }
 class Item{
-  constructor(website){     
+  constructor(website, item){     
     var handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         console.log(error);
@@ -812,8 +813,12 @@ class Item{
         }
 
         var weight = new AmazonWeight();
-        var category=new AmazonCategory();  
-        if (website.att.DETAILBLOCK!==undefined){
+        var category=new AmazonCategory();
+        if (item!==undefined){
+          weight = item.weight;
+          category = item.category;
+        }
+        else if (website.att.DETAILBLOCK!==undefined){
           // detailArray gồm nhiều row trong table chứa Detail
           var detailArray = myparser.getTextArray(website.att.DETAILBLOCK);
           weight.setWeight(detailArray);          
