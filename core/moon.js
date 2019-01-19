@@ -512,10 +512,10 @@ class Parser{
     try{
       
       for (var i = 0; i < blockElementArray.length; i++) {
-        console.log(blockElementArray[i]);         
+        //console.log(blockElementArray[i]);         
         var link = select(this.dom, blockElementArray[i]);
         if (link.length>index && link[index].name==='a') {
-          console.log(link[index]);
+          //console.log(link[index]);
           return link[index].attribs.href;
         }
       }  
@@ -823,10 +823,12 @@ class Item{
         this.webtax = website.att.TAX; // Thuế tại Mỹ của từng web
         this.webrate = website.att.RATE!==undefined?RATE[website.att.RATE]:RATE['USD']; // Quy đổi ngoại tệ
         
+        console.log(price);
         this.price=price; // Giá item
         this.shipping=shipping; // Giá ship của web
         this.priceshipping= Price.getPriceShipping(price, shipping); // Tổng giá item và ship
 
+        console.log(redirect);
         this.redirect=redirect;
         this.weight=weight;          
         this.category=category; 
