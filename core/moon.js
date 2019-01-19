@@ -433,6 +433,15 @@ const WEBSITES = {
       '.product-price-container .price-sales-usd'
     ]
   },
+  RILEYROSE: {
+    TAX: 0.083,
+    MATCH: "rileyrose.com",
+    NAME: "RileyRose",
+    JSONBLOCK:{
+      INDEX: 29,
+      PATH: "$.Offers.price"
+    } 
+  },
   SKIPHOP: {
     TAX: 0.083,
     MATCH: "skiphop.com",
