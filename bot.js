@@ -22,7 +22,7 @@ class MyBot {
                     // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
                     if (message.price==0 && message.redirect!=="")
                     {
-                        console.log("FOund redirect");
+                        console.log("Found redirect");
                         website= new Website(message.redirect);
                         message = await Website.getResponse(website);
                     }

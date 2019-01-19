@@ -510,9 +510,12 @@ class Parser{
   // Lấy ra link href trong thẻ <a>, từ danh sách các block chứa link web.REDIRECT
   getLink(blockElementArray, index = 0){
     try{
-      for (var i = 0; i < blockElementArray.length; i++) {          
+      
+      for (var i = 0; i < blockElementArray.length; i++) {
+        console.log(blockElementArray[i]);         
         var link = select(this.dom, blockElementArray[i]);
         if (link.length>index && link[index].name==='a') {
+          console.log(link[index]);
           return link[index].attribs.href;
         }
       }  
