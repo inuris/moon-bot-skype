@@ -771,7 +771,7 @@ class Website{
   static getAvailableWebsite(){
     var listweb = "";
     for (var web in WEBSITES){             
-      if(WEBSITES[web].PRICEBLOCK !== undefined && WEBSITES[web].NAME !== undefined){
+      if(WEBSITES[web].NAME !== undefined){
         listweb += WEBSITES[web].NAME + ", "
       }
     }
