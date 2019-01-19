@@ -24,7 +24,7 @@ class MyBot {
                     {
                         console.log("Found redirect");
                         website= new Website(item.redirect);
-                        item = await Website.getItem(website);
+                        item = await Website.getItem(website, item);
                     }
                     return turnContext.sendActivity(item.toText());                   
                 }
