@@ -290,6 +290,15 @@ const CATEGORIES = {
   }
 };
 const WEBSITES = {
+  AEROPOSTALE: {
+    TAX: 0,
+    MATCH: "aeropostale.com",
+    NAME: "AeroPostale",
+    PRICEBLOCK: [
+      ".product-price .price-sale",
+      ".product-price .price-msrp"
+    ]
+  },
   ALDO: {
     TAX: 0.083,
     MATCH: "aldoshoes"
@@ -373,6 +382,30 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "fragrancenet.com"
   },
+  ATHLETA: {
+    TAX: 0.083,
+    MATCH: "athleta.gap.com",
+    NAME: "Athleta",
+    JSONBLOCK:"$[0].offers[0].price"
+  },
+  BANANAREPUBLIC: {
+    TAX: 0.083,
+    MATCH: "bananarepublic.gap.com",
+    NAME: "BananaRepublic",
+    JSONBLOCK:"$[0].offers[0].price"
+  },
+  HILLCITY: {
+    TAX: 0.083,
+    MATCH: "hillcity.gap.com",
+    NAME: "HillCity",
+    JSONBLOCK:"$[0].offers[0].price"
+  },
+  OLDNAVY: {
+    TAX: 0.083,
+    MATCH: "oldnavy.gap.com",
+    NAME: "OldNavy",
+    JSONBLOCK:"$.offers[0].price"
+  },
   GAP: {
     TAX: 0.083,
     MATCH: "gap.com",
@@ -395,11 +428,7 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "ninewest.com"
   },
-  OLDNAVY: {
-    TAX: 0.083,
-    MATCH: "oldnavy.com"
-  },
-  OSHKOSH: {
+    OSHKOSH: {
     TAX: 0.083,
     MATCH: "oshkosh.com",
     NAME: "OshKosh",
