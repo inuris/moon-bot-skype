@@ -20,7 +20,7 @@ class MyBot {
                 if (website.found === true){
                     var message = await Website.getResponse(website);
                     // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
-                    if (message.price==0 && message.redirect!=="")
+                    if (message.price.value==0 && message.redirect!=="")
                     {
                         console.log("Found redirect");
                         website= new Website(message.redirect);
