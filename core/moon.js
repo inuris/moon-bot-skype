@@ -456,10 +456,6 @@ const WEBSITES = {
     TAX: 0.083,
     MATCH: "thebodyshop.com"
   },
-  VICTORIASSECRET: {
-    TAX: 0.083,
-    MATCH: "victoriassecret.com"
-  },
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com"
