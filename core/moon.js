@@ -361,9 +361,12 @@ const WEBSITES = {
     MATCH: "crocs.com",
     NAME: "Crocs",
     JSONBLOCK:{
-      INDEX: 2,
-      REGEX: /\{.+\}/gm,
-      PATH: "$.productValue"
+      KEYWORD: "masterData",
+      REGEX: /\{[.\s\S]+\}/gm,
+      PATH: [
+        "$..masterData.colors[?(@.isSale==true)].price",
+        "$..masterData.colors[?(@.isSale==false)].price",
+            ]
     } 
   },
   FOREVER21: {
@@ -372,7 +375,7 @@ const WEBSITES = {
     NAME: "Forever21",
     JSONBLOCK:{
       INDEX: 29,
-      PATH: "$.Offers.price"
+      PATH: ["$.Offers.price"]
     } 
   },
       // Subdomain của GAP
@@ -382,7 +385,7 @@ const WEBSITES = {
         NAME: "Athleta",
         JSONBLOCK:{
           INDEX: 0,
-          PATH: "$[0].offers[0].price"
+          PATH: ["$[0].offers[0].price"]
         }
       },
       BANANAREPUBLIC: {
@@ -391,7 +394,7 @@ const WEBSITES = {
         NAME: "BananaRepublic",
         JSONBLOCK:{
           INDEX: 0,
-          PATH: "$[0].offers[0].price"
+          PATH: ["$[0].offers[0].price"]
         }
       },
       HILLCITY: {
@@ -400,7 +403,7 @@ const WEBSITES = {
         NAME: "HillCity",
         JSONBLOCK:{
           INDEX: 0,
-          PATH: "$[0].offers[0].price"
+          PATH: ["$[0].offers[0].price"]
         }
       },
       OLDNAVY: {
@@ -409,7 +412,7 @@ const WEBSITES = {
         NAME: "OldNavy",
         JSONBLOCK:{
           INDEX: 0,
-          PATH: "$.offers[0].price"
+          PATH: ["$.offers[0].price"]
         }
       },
   GAP: {
@@ -418,7 +421,7 @@ const WEBSITES = {
     NAME: "GAP",
     JSONBLOCK:{
       INDEX: 0,
-      PATH: "$[0].offers[0].price"
+      PATH: ["$[0].offers[0].price"]
     }
   },
   NINEWEST: {
@@ -439,7 +442,7 @@ const WEBSITES = {
     NAME: "RileyRose",
     JSONBLOCK:{
       INDEX: 29,
-      PATH: "$.Offers.price"
+      PATH: ["$.Offers.price"]
     } 
   },
   SKIPHOP: {
@@ -472,7 +475,7 @@ const WEBSITES = {
     MATCH: "zara.com/us",
     JSONBLOCK:{
       INDEX: 16,
-      PATH: "$[0].offers.price"
+      PATH: ["$[0].offers.price"]
     }
   },
   ZARAES:{
@@ -481,7 +484,7 @@ const WEBSITES = {
     MATCH: "zara.com/es",
     JSONBLOCK:{
       INDEX: 16,
-      PATH: "$[0].offers.price"
+      PATH: ["$[0].offers.price"]
     }
   },
   ZULILY: {
@@ -526,17 +529,38 @@ class Parser{
   getJSON(jsonblock){
     try{
       var scriptBlock = select(this.dom, 'script');
-      if (scriptBlock.length>jsonblock.INDEX){
-        var html = htmlparser.DomUtils.getText(scriptBlock[jsonblock.INDEX])
-        if (jsonblock.REGEX !== undefined){
-          var matchhtml = html.match(jsonblock.REGEX);
-          if (matchhtml.length>0)
-            html = matchhtml[0];
+      var currentBlock;
+      // Nếu web có <script> chứa JSON có index cố định thì set sẵn Index trong db 
+      if (jsonblock.INDEX !==undefined && jsonblock.INDEX < scriptBlock.length){
+        currentBlock = htmlparser.DomUtils.getText(scriptBlock[jsonblock.INDEX])
+      }
+      // Nếu web có <script> chứa JSON nằm bất kì thì phải dò bằng KEYWORD
+      else if (jsonblock.KEYWORD !== undefined){
+        for (let i=0;i<scriptBlock.length;i++){
+          var tempBlock = htmlparser.DomUtils.getText(itemPriceBlock[i]);
+          if (tempBlock.indexOf(jsonblock.KEYWORD)>=0){
+            currentBlock = tempBlock;
+            break;
+          }
         }
-        var json = JSON.parse(html);
-        //console.log(json);      
-        return jp.query(json,jsonblock.PATH).toString();
-      }  
+      }
+      else {
+        return "";
+      }
+      // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
+      if (jsonblock.REGEX !== undefined){
+        var matchhtml = currentBlock.match(jsonblock.REGEX);
+        if (matchhtml.length>0)
+          currentBlock = matchhtml[0];
+      }
+
+      var json = JSON.parse(currentBlock);
+      for (let i=0;i<jsonblock.PATH.length;i++){
+        var query=jp.query(json,jsonblock.PATH).toString();
+        if (query!=="")
+          return query;
+      }
+      //console.log(json);      
       return "";
     }
     catch(e){
@@ -548,7 +572,7 @@ class Parser{
   getLink(blockElementArray, index = 0){
     try{
       
-      for (var i = 0; i < blockElementArray.length; i++) {
+      for (let i = 0; i < blockElementArray.length; i++) {
         //console.log(blockElementArray[i]);         
         var link = select(this.dom, blockElementArray[i]);
         if (link.length>index && link[index].name==='a') {
@@ -565,7 +589,7 @@ class Parser{
   // Lấy ra plain text từ các array các block
   getText(blockElementArray, index = 0){
     try{    
-      for (var i = 0; i < blockElementArray.length; i++) {          
+      for (let i = 0; i < blockElementArray.length; i++) {          
           var text = select(this.dom, blockElementArray[i]);
           //console.log(htmlparser.DomUtils.getText(text));
           if (text.length>index) {        
@@ -584,12 +608,12 @@ class Parser{
   getTextArray(blockElementArray){
     try{
       var textArray=[];
-      for (var i = 0; i < blockElementArray.length; i++) {
+      for (let i = 0; i < blockElementArray.length; i++) {
         // Nguyên table data
         //console.log(blockElementArray[i]);
         var textTable = select(this.dom, blockElementArray[i]);  
         
-        for (var e of textTable){
+        for (let e of textTable){
           if (e.type === "tag") {
             //row là 1 dòng gồm có 5 element: <td>Weight</td><td>$0.00</td>
             var row = e.children;
@@ -622,12 +646,12 @@ class AmazonCategory{
     var catString="";
     var catType="GENERAL"; 
     if (detailArray!== null){
-      for(var i =0;i<detailArray.length;i++){
+      for (let i =0;i<detailArray.length;i++){
         if (detailArray[i].indexOf("sellers rank")>=0){ 
           catString=detailArray[i].replace(/\s{2,}|\..+ {.+}|see top 100| in |(amazon )?best sellers rank:?|#\d*,?\d*/gi, "|");
           found=true;        
           // Query từng KEYWORD trong category
-          for (var cat in CATEGORIES) {
+          for (let cat in CATEGORIES) {
             if (
               this.checkKeyword(
                 catString,
@@ -651,9 +675,9 @@ class AmazonCategory{
   // Kiểm tra keyword có tồn tại trong array include và không tồn tại trong exclude
   // checkkeyword(string,array,array)
   checkKeyword(keyString, include, exclude){  
-    for (var i = 0; i < include.length; i++) {
+    for (let i = 0; i < include.length; i++) {
       if (keyString.indexOf(include[i]) >= 0) {
-        for (var j = 0; j < exclude.length; j++) {
+        for (let j = 0; j < exclude.length; j++) {
           if (keyString.indexOf(exclude[j]) >= 0) {
             return false;
           }
@@ -677,7 +701,7 @@ class AmazonWeight{
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
     if (detailArray!== null)
-    for (var i = 0; i < detailArray.length; i++) {
+    for (let i = 0; i < detailArray.length; i++) {
       if (detailArray[i].indexOf("weight") >= 0 || detailArray[i].indexOf("dimensions") >= 0){
         var weightReg = detailArray[i].match(reg); // ["2.6 pound", "2.6", " pound", index: 16, input: "shipping weight	2.6 pounds"
         //console.log(weightReg);
@@ -747,7 +771,7 @@ class Website{
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
-      for (var web in WEBSITES){             
+      for (let web in WEBSITES){             
         if(tempMatch[0].indexOf(WEBSITES[web].MATCH)>=0){
           tempUrl = tempMatch[0]; 
           tempDomain = tempMatch[1];
@@ -807,7 +831,7 @@ class Website{
   }
   static getAvailableWebsite(){
     var listweb = "";
-    for (var web in WEBSITES){             
+    for (let web in WEBSITES){             
       if(WEBSITES[web].NAME !== undefined){
         listweb += WEBSITES[web].NAME + ", "
       }
