@@ -855,7 +855,7 @@ class Item{
           price.setPrice(priceString);          
         }
         else if (website.att.JSONBLOCK!==undefined){
-          var priceString = myparser.getJSON(website.att.JSONBLOCK).toString(); 
+          var priceString = myparser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
         }
 
