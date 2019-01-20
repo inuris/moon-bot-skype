@@ -564,6 +564,7 @@ class Parser{
       return "";
     }
     catch(e){
+      console.log(e);
       return "";
     }
   }
