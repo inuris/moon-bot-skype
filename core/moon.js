@@ -556,7 +556,7 @@ class Parser{
 
       var json = JSON.parse(currentBlock);
       for (let i=0;i<jsonblock.PATH.length;i++){
-        var query=jp.query(json,jsonblock.PATH).toString();
+        var query=jp.query(json,jsonblock.PATH[i]).toString();
         if (query!=="")
           return query;
       }
