@@ -537,7 +537,7 @@ class Parser{
       // Nếu web có <script> chứa JSON nằm bất kì thì phải dò bằng KEYWORD
       else if (jsonblock.KEYWORD !== undefined){
         for (let i=0;i<scriptBlock.length;i++){
-          var tempBlock = htmlparser.DomUtils.getText(itemPriceBlock[i]);
+          var tempBlock = htmlparser.DomUtils.getText(scriptBlock[i]);
           if (tempBlock.indexOf(jsonblock.KEYWORD)>=0){
             currentBlock = tempBlock;
             break;
