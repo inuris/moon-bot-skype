@@ -24,7 +24,7 @@
         "request": "^2.88.0",
         "restify": "^7.2.3",
         "soupselect-update": "^0.2.5",
-        "winston": "^3.1.0"
+        "discord-logger": "^1.0.1"
     },
     "devDependencies": {
         "eslint": "^5.8.0",
