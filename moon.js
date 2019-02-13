@@ -775,10 +775,6 @@ class Weight{
         }
       }
     }
-<<<<<<< HEAD
-    // Làm tròn kg lên 0.1
-    kg = Math.ceil(kg * 10) / 10;
-=======
     // Nếu tìm dc cân nặng thì làm tròn
     if (kg>0){
       // Làm tròn lên 0.1
@@ -787,7 +783,6 @@ class Weight{
       if (kg < 0.2) {kg=0.2};
     }
     
->>>>>>> 4b11d720d424696a195f7699b723a131a4b1ce2d
     this.string=current;
     this.kg=kg;
     this.unit=unit;
