@@ -898,10 +898,12 @@ class Item{
         var myparser = new Parser(dom);
 
         var price=new Price();
+        // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK);
           price.setPrice(priceString);          
         }
+        // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
         else if (website.att.JSONBLOCK!==undefined){
           var priceString = myparser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
@@ -923,7 +925,10 @@ class Item{
 
         var weight = new Weight();
         var category=new Category();
-        if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+
+        // recentitem chỉ có khi vào trang redirect rồi
+        if (recentitem!==undefined){ 
+          // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
           if (recentitem.weight.kg!==0)
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
@@ -936,7 +941,7 @@ class Item{
           weight.setWeight(detailArray,website.att.WEIGHTCONDITION);          
           category.setCategory(detailArray, website.att.CATEGORYCONDITION); 
         }
-        else{
+        else{ // các trang thông thường sẽ có category nằm riêng, weight nằm riêng
           if (website.att.CATEGORYBLOCK!==undefined){
             var categoryString = myparser.getTextArray(website.att.CATEGORYBLOCK);
             category.setCategory(categoryString); 
