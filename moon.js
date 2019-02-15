@@ -377,7 +377,7 @@ const WEBSITES = {
     } 
   },
   FOREVER21: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "forever21.com",
     NAME: "Forever21",
     SILENCE: false,
@@ -398,7 +398,7 @@ const WEBSITES = {
         }
       },
       BANANAREPUBLIC: {
-        TAX: 0.083,
+        TAX: 0,
         MATCH: "bananarepublic.gap.com",
         NAME: "BananaRepublic",
         SILENCE: false,
@@ -439,7 +439,7 @@ const WEBSITES = {
   },
   JOMASHOP: {
     SILENT: true,
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
     SILENCE: true,
@@ -485,7 +485,7 @@ const WEBSITES = {
     ]
   },
   THEBODYSHOP: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "thebodyshop.com",
     SILENCE: true,
     PRICEBLOCK:[
