@@ -24,7 +24,7 @@ class MyBot {
         const response = async (turnContext) => {
             if (turnContext.activity.type === ActivityTypes.Message) {
                 if (turnContext.activity.text.indexOf("!list")>=0){
-                    return turnContext.sendActivity("Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
+                    await turnContext.sendActivity("Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
                 }
                 else
                 {
@@ -45,10 +45,10 @@ class MyBot {
                             if (log.type==="error") logger.error(log.content);
                             else logger.success(log.content);
                         }
-                        return turnContext.sendActivity(item.toText());                   
+                        await turnContext.sendActivity(item.toText());                   
                     }
                     if (website.isUrl === true)
-                        return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
+                        await turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
                 }                         
             } 
         };       
