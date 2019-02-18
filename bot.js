@@ -23,7 +23,7 @@ class MyBot {
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types. 
         const response = async (turnContext) => {
             if (turnContext.activity.type === ActivityTypes.Message) {
-                if (turnContext.activity.text==="!list"){
+                if (turnContext.activity.text.indexOf("!list")>=0){
                     return turnContext.sendActivity("Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
                 }
                 else
@@ -50,9 +50,6 @@ class MyBot {
                     if (website.isUrl === true)
                         return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
                 }                         
-            } 
-            else {
-                await turnContext.sendActivity(`Gõ !list để xem các web hỗ trợ`);
             } 
         };       
         await response(turnContext);
