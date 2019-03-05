@@ -2,7 +2,7 @@
 // modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
-const request = require("request");
+const request = require("request-promise");
 const jp = require('jsonpath');
 const RATE = {
   'USD': 24000,
@@ -15,8 +15,8 @@ const CATEGORIES = {
     EXTRA: 5,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Kính mát",
     NOTE: "Phụ thu $5/cái",
     KEYWORD: ["sunglasses", "eyewear accessories"],
@@ -28,8 +28,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Dây nịt",
     NOTE: "Phí ship $11/kg",
     KEYWORD: ["belt"],
@@ -41,8 +41,8 @@ const CATEGORIES = {
     EXTRA: 15,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Đồng hồ",
     NOTE: "Phụ thu $15/cái",
     KEYWORD: ["watches"],
@@ -54,8 +54,8 @@ const CATEGORIES = {
     EXTRA: 5,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Trang sức",
     NOTE: "Phụ thu $5/cái",
     KEYWORD: ["> jewelry"],
@@ -67,8 +67,8 @@ const CATEGORIES = {
     EXTRA: 40,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Xe đạp",
     NOTE: "Phí ship $12/kg + Phụ thu $40/chiếc",
     KEYWORD: ["bike", "walker", "rollator","cycling"],
@@ -80,8 +80,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Dụng cụ nhà bếp",
     NOTE: "Phí ship $12/kg",
     KEYWORD: ["coffee machine", "blender", "brewer", "appliance"],
@@ -93,8 +93,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0,
-    HQANCHOR: 500,
+    HVEXTRA: 0,
+    HVANCHOR: 500,
     NAME: "Đĩa nhạc, game",
     NOTE: "Phí ship $10/kg",
     KEYWORD: ["video games", " > games","blu-ray >", "dvd >"],
@@ -106,8 +106,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0,
-    HQANCHOR: 500,
+    HVEXTRA: 0,
+    HVANCHOR: 500,
     NAME: "Thuốc - Vitamin - Hóa chất",
     NOTE: "Phí ship $11/kg",
     KEYWORD: [
@@ -128,8 +128,8 @@ const CATEGORIES = {
     EXTRA: 40,
     PRICEEXTRA: 70,
     PRICEANCHOR: 25,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Điện thoại - Laptop",
     NOTE: "Phí ship $12/kg + Phụ thu $40/cái",
     KEYWORD: [
@@ -146,8 +146,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 0,
+    HVEXTRA: 0.1,
+    HVANCHOR: 0,
     NAME: "Máy chơi game",
     NOTE: "Phí ship $13/kg",
     KEYWORD: [" > consoles"],
@@ -159,8 +159,8 @@ const CATEGORIES = {
     EXTRA: 35,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Camera",
     NOTE: "Phụ thu $35/chiếc",
     KEYWORD: ["camera & photo > video >", "camera & photo > dslr cameras"],
@@ -172,8 +172,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Golf",
     NOTE: "Phí ship $12/kg",
     KEYWORD: ["golf club", " > racquets"],
@@ -185,8 +185,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.05,
-    HQANCHOR: 500,
+    HVEXTRA: 0.05,
+    HVANCHOR: 500,
     NAME: "Điện tử",
     NOTE: "Phí ship $13/kg",
     KEYWORD: [
@@ -226,8 +226,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.05,
-    HQANCHOR: 500,
+    HVEXTRA: 0.05,
+    HVANCHOR: 500,
     NAME: "Phụ kiện xe hơi",
     NOTE: "Phí ship $11/kg",
     KEYWORD: ["> wheels & tires >",
@@ -240,8 +240,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Sữa",
     NOTE: "Phí ship $7.5/kg",
     KEYWORD: ["bottled beverages, water & drink mixes"],
@@ -253,8 +253,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Quần áo, giày dép",
     NOTE: "Phí ship $8.5/kg",
     KEYWORD: ["clothing, shoes & jewelry >"],
@@ -266,8 +266,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "thông thường",
     NOTE: "Phí ship $8.5/kg",
     KEYWORD: [],
@@ -279,8 +279,8 @@ const CATEGORIES = {
     EXTRA: 0,
     PRICEEXTRA: 0,
     PRICEANCHOR: 0,
-    HQEXTRA: 0.1,
-    HQANCHOR: 500,
+    HVEXTRA: 0.1,
+    HVANCHOR: 500,
     NAME: "Chưa xác định",
     NOTE: "Phí ship tính theo cân nặng, sẽ được thông báo sau khi hàng về",
     KEYWORD: [],
@@ -288,12 +288,24 @@ const CATEGORIES = {
   }
 };
 const WEBSITES = {
+  AMAZON3RD:{
+    TAX: 0.083,
+    MATCH: "amazon.com/gp/offer-listing",
+    SILENCE: false,
+    //COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHVjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    PRICEBLOCK: [
+      ".olpOfferPrice"
+    ],
+    SHIPPINGBLOCK: [
+      ".olpShippingInfo"
+    ]
+  },  
   AMAZON: {
     TAX: 0.083,
     MATCH: "amazon.com",
     NAME: "Amazon",
     SILENCE: false,
-    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
+    //COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHVjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
     DETAILBLOCK: [
       "#productDetails_detailBullets_sections1 tr",
       "#detailBulletsWrapper_feature_div li",
@@ -309,6 +321,7 @@ const WEBSITES = {
       "#priceblock_dealprice",
       "#priceblock_ourprice",
       "#priceblock_saleprice",
+      "#priceblock_pospromoprice",
       ".guild_priceblock_ourprice",
       ".offer-price",
       "#alohaPricingWidget .a-color-price"
@@ -328,18 +341,6 @@ const WEBSITES = {
     PRICEBLOCK: [
       ".product-price .price-sale",
       ".product-price .price-msrp"
-    ]
-  },
-  AMAZON3RD:{
-    TAX: 0.083,
-    MATCH: "amazon.com/gp/offer-listing",
-    SILENCE: false,
-    COOKIE:"session-id=145-0181747-4095778; session-token=Y1mJ+P3eHpParb4TsuuNijPOisCg68nT0KcIo0qjgYiyErNXSpH1b/WILk1MsAepA9B1gzNC+2sHWf0OyK9NC/EYCk503FS7cqRM2pjv63Cy3p2HkMnAV4rMOnez+22Iev1N9Wi2lJsY5uyNxq/2LBaRq4/uKUGctUoe2ofX3eHQjPPodol2L+twTquBidvaCahHsJMmvY/ZEJGgRMuG6xdYFYzvUR229XMtQua4+BLSLBGnZPbCH7HKbMX3lyp9; ubid-main=130-5429414-6939308",
-    PRICEBLOCK: [
-      ".olpOfferPrice"
-    ],
-    SHIPPINGBLOCK: [
-      ".olpShippingInfo"
     ]
   },  
   BHPHOTOVIDEO: {
@@ -376,7 +377,7 @@ const WEBSITES = {
     } 
   },
   FOREVER21: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "forever21.com",
     NAME: "Forever21",
     SILENCE: false,
@@ -397,7 +398,7 @@ const WEBSITES = {
         }
       },
       BANANAREPUBLIC: {
-        TAX: 0.083,
+        TAX: 0,
         MATCH: "bananarepublic.gap.com",
         NAME: "BananaRepublic",
         SILENCE: false,
@@ -438,7 +439,7 @@ const WEBSITES = {
   },
   JOMASHOP: {
     SILENT: true,
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
     SILENCE: true,
@@ -484,9 +485,13 @@ const WEBSITES = {
     ]
   },
   THEBODYSHOP: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "thebodyshop.com",
-    SILENCE: true
+    SILENCE: true,
+    PRICEBLOCK:[
+      '.current-price',
+      '.price-wrapper'
+    ]
   },
   WALGREENS: {
     TAX: 0.083,
@@ -512,16 +517,16 @@ const WEBSITES = {
       PATH: ["$[0].offers.price"]
     }
   },
-  ZARAES:{
-    TAX: 0,
-    RATE: 'EUR',
-    MATCH: "zara.com/es",
-    SILENCE: false,
-    JSONBLOCK:{
-      INDEX: 16,
-      PATH: ["$[0].offers.price"]
-    }
-  }
+  // ZARAES:{
+  //   TAX: 0,
+  //   RATE: 'EUR',
+  //   MATCH: "zara.com/es",
+  //   SILENCE: false,
+  //   JSONBLOCK:{
+  //     INDEX: 16,
+  //     PATH: ["$[0].offers.price"]
+  //   }
+  // }
 };
 
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
@@ -696,7 +701,7 @@ class Parser{
     }
   }
 }
-class AmazonCategory{
+class Category{
   constructor(){
     this.string = "";
     this.att = CATEGORIES["UNKNOWN"];
@@ -732,7 +737,7 @@ class AmazonCategory{
     this.att = CATEGORIES[catType];
   }    
 }
-class AmazonWeight{
+class Weight{
   constructor(){ 
     this.string="";
     this.kg=0;
@@ -740,7 +745,7 @@ class AmazonWeight{
   }
   setWeight(detailArray, weightCondition){
     var current= "",
-        kg= 0,
+        kg= 0.2,
         unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
@@ -770,7 +775,14 @@ class AmazonWeight{
         }
       }
     }
-    kg = Math.round(kg * 1000) / 1000;
+    // Nếu tìm dc cân nặng thì làm tròn
+    if (kg>0){
+      // Làm tròn lên 0.1
+      kg = Math.ceil(kg * 10) / 10;
+      // Nếu nhỏ hơn 0.2kg thì làm tròn 0.2
+      if (kg < 0.2) {kg=0.2};
+    }
+    
     this.string=current;
     this.kg=kg;
     this.unit=unit;
@@ -784,9 +796,9 @@ class Price{
   }
   setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim();
+                                .trim().toLowerCase();
     this.string = tempString;
-    tempString = tempString.replace(/\$\s*|,/gm, "")
+    tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){
         var tempMatch = tempString.match(reg)
@@ -815,6 +827,7 @@ class Website{
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
+      tempUrl = tempMatch[0]; // Lấy ra url trong đoạn text
       for (let i in WEBSITES){             
         if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
           tempUrl = tempMatch[0]; // full url
@@ -839,31 +852,31 @@ class Website{
   setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-  static async getItem(website, recentitem){
-    const iteminfo = await new Promise(resolve => {                        
-      var requestOptions = {
-          method: "GET",
-          url: website.url,
-          gzip: true,
-          jar: true
-      };
-      // Nếu website cần Cookie thì set
-      if (website.att.COOKIE !== undefined){
-          var cookie = request.cookie(website.att.COOKIE);
-          requestOptions.headers = {
-              'Cookie' : cookie,
-              'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-          };
-      }
-      request(requestOptions, function(error, response, body) {
-          // Đưa html raw vào website
-          website.setDom(body);  
-          var item = new Item(website, recentitem);
-          resolve(item);
-      });  
-    })
-    // trả về Item type, tùy vào nhu cầu sẽ lấy item.toText() hoặc item.toFBResponse()
-    return iteminfo;
+  static async getItem(website, recentitem){                     
+    var requestOptions = {
+        method: "GET",
+        url: website.url,
+        gzip: true,
+        jar: true
+    };
+    // Nếu website cần Cookie thì set
+    if (website.att.COOKIE !== undefined){
+        var cookie = request.cookie(website.att.COOKIE);
+        requestOptions.headers = {
+            'Cookie' : cookie,
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+        };
+    }
+    try {
+      const body = await request(requestOptions);
+      // Đưa html raw vào website
+      website.setDom(body);
+      var item = new Item(website, recentitem);
+      return item;
+    }
+    catch (err) {
+      return null;
+    }
   }
   static getAvailableWebsite(){
     var listweb = "";
@@ -886,10 +899,12 @@ class Item{
         var myparser = new Parser(dom);
 
         var price=new Price();
+        // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK);
           price.setPrice(priceString);          
         }
+        // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
         else if (website.att.JSONBLOCK!==undefined){
           var priceString = myparser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
@@ -909,9 +924,12 @@ class Item{
             redirect = website.domain + newurl;            
         }
 
-        var weight = new AmazonWeight();
-        var category=new AmazonCategory();
-        if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+        var weight = new Weight();
+        var category=new Category();
+
+        // recentitem chỉ có khi vào trang redirect rồi
+        if (recentitem!==undefined){ 
+          // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
           if (recentitem.weight.kg!==0)
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
@@ -924,7 +942,7 @@ class Item{
           weight.setWeight(detailArray,website.att.WEIGHTCONDITION);          
           category.setCategory(detailArray, website.att.CATEGORYCONDITION); 
         }
-        else{
+        else{ // các trang thông thường sẽ có category nằm riêng, weight nằm riêng
           if (website.att.CATEGORYBLOCK!==undefined){
             var categoryString = myparser.getTextArray(website.att.CATEGORYBLOCK);
             category.setCategory(categoryString); 
@@ -956,44 +974,43 @@ class Item{
   }  
   calculatePrice(){
     var itemPrice = this.priceshipping;
-    var category= this.category;
     var itemTax = itemPrice * this.webatt.TAX; // Thuế tại Mỹ
     var itemPriceAfterTax = itemPrice + itemTax; // Giá Sau Thuế
-    //console.log("tax: " + itemTax + " (" + this.webtax * 100 + "%)");
+    //console.log("tax: " + itemTax + " (" + this.webatt.TAX * 100 + "%)");
   
     var itemMoon = itemPriceAfterTax * (itemPriceAfterTax < 300 ? 0.07 : 0.05); // Công mua tính theo Giá Sau Thuế
     //console.log("moon: " + itemMoon);
   
-    var itemWeight = Math.ceil(this.weight.kg * 10) / 10;
-    var itemShip = itemWeight * category.att.SHIP; // Giá ship theo cân nặng
-    //console.log("ship: $" + category.att.SHIP + "/kg x " + itemWeight + "kg");
+    var itemWeight = this.weight.kg;
+    var itemShip = itemWeight * this.category.att.SHIP; // Giá ship theo cân nặng
+    //console.log("ship: $" + this.category.att.SHIP + "/kg x " + itemWeight + "kg");
   
-    var itemPriceExtra =
-    category.att.EXTRA +
-      (itemPrice >= category.att.PRICEANCHOR
-        ? category.att.PRICEEXTRA
+    var itemPriceExtra = this.category.att.EXTRA +
+      (itemPrice >= this.category.att.PRICEANCHOR
+        ? this.category.att.PRICEEXTRA
         : 0); /// Phụ thu theo cái
     //console.log("extra: " + category.att.EXTRA);
   
-    var itemHQEXTRA =
+    var itemHVEXTRA =
       itemPrice *
-      (itemPrice >= category.att.HQANCHOR
-        ? category.att.HQEXTRA
-        : 0); // Phụ thu giá trị cao (HQANCHOR)
-    //console.log("high price extra: " + itemHQEXTRA);
+      (itemPrice >= this.category.att.HVANCHOR
+        ? this.category.att.HVEXTRA
+        : 0); // Phụ thu giá trị cao (HVANCHOR)
+    //console.log("high price extra: " + itemHVEXTRA);
   
     var itemTotal =
       itemPrice > 0
-        ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHQEXTRA
+        ? itemPriceAfterTax + itemMoon + itemShip + itemPriceExtra + itemHVEXTRA
         : 0;
     //console.log("total: " + itemTotal);
     return itemTotal;
   }
+  // Xuất log gồm log.type (error/success) và log.content dạng string
   toLog(){
     let logContent =`
 URL : ${this.weburl}
 PRICE : ${this.price.string}
-SHIPPING : ${this.shipping.string}
+SHIPPING : ${this.shipping.value} ~ ${this.shipping.string}
 WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
 CATEGORY : ${this.category.att.ID}
 TOTAL : ${this.totalString}
@@ -1012,8 +1029,10 @@ CATEGORYSTRING : ${this.category.string}`;
     console.log(logContent);
     return log;
   }
+  // Xuất ra string báo giá và chú thích
   toText(){
     var response;
+    // Nếu ko xác định dc giá
     if (this.totalString ==""){
       response= "Ko xác định được giá sản phẩm. Vui lòng chat với Moon để được báo giá chính xác."
     }
@@ -1031,8 +1050,13 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  
+  // Xuất ra json theo format response của FB
+  // Dùng để auto reply
+  // badgeImageUrl là hình cover của response
   toFBResponse(badgeImageUrl){  
     var response;
+    // Nếu ko xác định dc giá
     if (this.totalString ==""){
       response= {
         "attachment": {
@@ -1087,10 +1111,54 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  // Xuất ra json theo format response của FB
+  // Dùng để gửi admin duyệty
+  // gửi thông tin báo giá kèm theo button cho phép trả lời nhanh
+  toFBAdmin(senderid,sendername){  
+    var response;
+    let responseContent =`${sendername} gửi link ${this.weburl}
+- Giá web: ${this.price.string}`;
+    if (this.shipping.value>0) {
+    responseContent += `
+- Ship: ${this.shipping.value}`;
+    }
+    if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
+      responseContent += "\n- Chưa có cân nặng";
+    }
+    else
+      responseContent += `
+- Cân: ${this.weight.kg}kg
+- Mặt hàng ${this.category.att.NAME}`;
+    let payloadContent_1=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
+    let payloadContent_2=`send|${senderid}|Cái này là ${this.totalString}`;
+    response =  {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type":"button",
+          "text":responseContent,
+          "buttons":[
+            {
+              "type":"postback",
+              "payload": payloadContent_1,
+              "title": "Dạ, " + this.totalString
+            },
+            {
+              "type":"postback",
+              "payload": payloadContent_2,
+              "title": "Cái này " + this.totalString
+            }
+          ]
+        }
+      }
+    }  
+    return response;
+  }
+  // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
   toVND(price){    
     var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
     var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
-    return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
+    return priceNew.formatMoney(0, ',', '.')+"đ"; // Thêm VND vào
   }
 }
 module.exports.Website=Website;

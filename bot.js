@@ -18,20 +18,22 @@ class MyBot {
     /**
      *
      * @param {TurnContext} on turn context object.
-     */    
+     */ 
     async onTurn(turnContext) {
-        // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types. 
-        const response = async (turnContext) => {
-            if (turnContext.activity.type === ActivityTypes.Message) {
-                if (turnContext.activity.text==="!list"){
-                    return turnContext.sendActivity("Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
-                }
-                else
-                {
-                    var website= new Website(turnContext.activity.text);
-                    // Nếu có trong list website thì mới trả lời
-                    if (website.found === true){
-                        var item = await Website.getItem(website);
+        // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.               
+        await this.response(turnContext);
+    };
+    async response (turnContext){
+        if (turnContext.activity.type === ActivityTypes.Message) {
+            if (turnContext.activity.text.indexOf("!list")>=0){
+                return turnContext.sendActivity("Moon hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
+            }
+            else
+            {
+                var website= new Website(turnContext.activity.text);
+                // Nếu có trong list website thì mới trả lời
+                if (website.found === true){
+                    await Website.getItem(website).then((item) =>{
                         var log=item.toLog();
                         if (log.type==="error") logger.error(log.content);
                         else logger.success(log.content);
@@ -40,23 +42,21 @@ class MyBot {
                         {
                             console.log("Found redirect");
                             website= new Website(item.redirect);
-                            item = await Website.getItem(website, item);
-                            log=item.toLog();
-                            if (log.type==="error") logger.error(log.content);
-                            else logger.success(log.content);
+                            Website.getItem(website, item).then((item) =>{
+                              log=item.toLog();
+                              if (log.type==="error") logger.error(log.content);
+                              else logger.success(log.content);
+                            })
                         }
-                        return turnContext.sendActivity(item.toText());                   
-                    }
-                    if (website.isUrl === true)
-                        return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
-                }                         
-            } 
-            else {
-                await turnContext.sendActivity(`Gõ !list để xem các web hỗ trợ`);
-            } 
-        };       
-        await response(turnContext);
+                        return turnContext.sendActivity(item.toText());     
+                    })              
+                }
+                else if (website.isUrl === true)
+                    return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
+            }                         
+        } 
     };
+    
     
 }
 

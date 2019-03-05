@@ -1,5 +1,5 @@
 {
-  "name": "Moon Bot Skype",
+  "name": "moon-bot-skype",
   "version": "1.0.0",
   "description": "Examples for the Bot Builder framework.",
   "author": "Microsoft Corp.",
@@ -7,16 +7,17 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
-  },  
+  },
   "dependencies": {
-    "botbuilder": "^4.2.0",
-    "botframework-config": "^4.2.0",
-    "dotenv": "^6.1.0",
-    "htmlparser2": "^3.10.0",
-    "jsonpath": "^1.0.0",
+    "botbuilder": "^4.3.1",
+    "botframework-config": "^4.3.2",
+    "dotenv": "^6.2.0",
+    "htmlparser2": "^3.10.1",
+    "jsonpath": "^1.0.1",
     "request": "^2.88.0",
-    "restify": "^7.2.3",
+    "restify": "^8.0.0",
     "soupselect-update": "^0.2.5",
-    "discord-logger": "^1.0.1"
+    "discord-logger": "^1.0.1",
+    "request-promise": "^4.2.4"
   }
 }
