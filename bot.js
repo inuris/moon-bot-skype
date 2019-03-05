@@ -31,21 +31,22 @@ class MyBot {
                     var website= new Website(turnContext.activity.text);
                     // Nếu có trong list website thì mới trả lời
                     if (website.found === true){
-                        var item = await Website.getItem(website);
-                        var log=item.toLog();
-                        if (log.type==="error") logger.error(log.content);
-                        else logger.success(log.content);
-                        // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
-                        if (item.price.value==0 && item.redirect!=="")
-                        {
-                            console.log("Found redirect");
-                            website= new Website(item.redirect);
-                            item = await Website.getItem(website, item);
-                            log=item.toLog();
+                        Website.getItem(website).then((item) =>{
+                            var log=item.toLog();
                             if (log.type==="error") logger.error(log.content);
                             else logger.success(log.content);
-                        }
-                        await turnContext.sendActivity(item.toText());                   
+                            // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
+                            if (item.price.value==0 && item.redirect!=="")
+                            {
+                                console.log("Found redirect");
+                                website= new Website(item.redirect);
+                                item = await Website.getItem(website, item);
+                                log=item.toLog();
+                                if (log.type==="error") logger.error(log.content);
+                                else logger.success(log.content);
+                            }
+                            await turnContext.sendActivity(item.toText());     
+                        })              
                     }
                     if (website.isUrl === true)
                         await turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
