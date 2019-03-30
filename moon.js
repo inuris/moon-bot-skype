@@ -2,7 +2,7 @@
 // modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
-const request = require("request");
+const request = require("request-promise");
 const jp = require('jsonpath');
 const RATE = {
   'USD': 24000,
@@ -377,12 +377,12 @@ const WEBSITES = {
     } 
   },
   FOREVER21: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "forever21.com",
     NAME: "Forever21",
     SILENCE: false,
     JSONBLOCK:{
-      INDEX: 29,
+      SELECTOR:'script[type="application/ld+json"]',
       PATH: ["$.Offers.price"]
     } 
   },
@@ -398,7 +398,7 @@ const WEBSITES = {
         }
       },
       BANANAREPUBLIC: {
-        TAX: 0.083,
+        TAX: 0,
         MATCH: "bananarepublic.gap.com",
         NAME: "BananaRepublic",
         SILENCE: false,
@@ -439,10 +439,10 @@ const WEBSITES = {
   },
   JOMASHOP: {
     SILENT: true,
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
-    SILENCE: true,
+    SILENCE: false,
     COOKIE:"bounceClientVisit355v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AVgPYC2AhinFRGQMa1EICWKKVCAWmJ0ErOAIQAGABwBWACy4A7AEYVktZMllENMCAA0IAE4wQpYpVoMmLdjRABfIA; _vuid=d11ab39c-b372-43e3-ad8d-3617c5cb6d4e; D_HID=62B7A346-4058-3C77-8CB7-ED51A5943914; D_IID=A74F366D-F291-329B-8AE3-695F6EBA958A; D_SID=115.77.169.59:WASVmq9DjNjsYYd7Yje++3y4C70jD9sz5J1mpazEagA; D_UID=CDF9689C-0487-3CF1-80E9-F81FCB40B168; D_ZID=F7698C1E-15E4-32FF-807F-C52EA2BA8BF2; D_ZUID=862AEB79-2FF9-382C-B620-D920270D33BD; gateCpc=[%22first_cpc%22]; gateNonDirect=[%22first_cpc%22]; tracker_device=8e55fcc1-53aa-4815-8985-04a6011b9886;",
     JSONBLOCK:{
       SELECTOR: '#xitem-primary-json',
@@ -454,7 +454,7 @@ const WEBSITES = {
   NINEWEST: {
     TAX: 0.083,
     MATCH: "ninewest.com",
-    SILENCE: true
+    SILENCE: false
   },
   OSHKOSH: {
     TAX: 0.083,
@@ -485,9 +485,9 @@ const WEBSITES = {
     ]
   },
   THEBODYSHOP: {
-    TAX: 0.083,
+    TAX: 0,
     MATCH: "thebodyshop.com",
-    SILENCE: true,
+    SILENCE: false,
     PRICEBLOCK:[
       '.current-price',
       '.price-wrapper'
@@ -496,7 +496,7 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
-    SILENCE: true
+    SILENCE: false
   },
   WALMART: {
     TAX: 0,
@@ -589,6 +589,7 @@ class Parser{
       if (jsonblock.SELECTOR!==undefined)
         selector = jsonblock.SELECTOR;
       var scriptBlock = select(this.dom, selector);
+      if (scriptBlock === null) return "";
       var currentBlock;
       // Nếu web có <script> chứa JSON có index cố định thì set INDEX trong db để lấy đúng cái block[index] đó
       if (jsonblock.INDEX !==undefined && jsonblock.INDEX < scriptBlock.length){
@@ -604,8 +605,9 @@ class Parser{
           }
         }
       }
-      else {
-        return "";
+      else{
+        // Mặc định lấy scriptBlock đầu tiên (thường dùng selector sẽ chỉ ra 1 block)
+        currentBlock = htmlparser.DomUtils.getText(scriptBlock[0]);
       }
       // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
       if (jsonblock.REGEX !== undefined){
@@ -613,7 +615,7 @@ class Parser{
         if (matchhtml.length>0)
           currentBlock = matchhtml[0];
       }
-
+      //console.log(currentBlock);  
       var json = JSON.parse(currentBlock);
       // Có nhiều Path để lấy các trường hợp giá Sale/giá Thường có path khác nhau
       for (let i=0;i<jsonblock.PATH.length;i++){
@@ -745,7 +747,7 @@ class Weight{
   }
   setWeight(detailArray, weightCondition){
     var current= "",
-        kg= 0.2,
+        kg= 0,
         unit= "";
     //console.log(detailArray);
     var reg = /(\d*,*\d+\.*\d*)( ounce| pound| oz)/; 
@@ -775,8 +777,14 @@ class Weight{
         }
       }
     }
-    // Làm tròn kg lên 0.1
-    kg = Math.ceil(kg * 10) / 10;
+    // Nếu tìm dc cân nặng thì làm tròn
+    if (kg>0){
+      // Làm tròn lên 0.1
+      kg = Math.ceil(kg * 10) / 10;
+      // Nếu nhỏ hơn 0.2kg thì làm tròn 0.2
+      if (kg < 0.2) {kg=0.2};
+    }
+    
     this.string=current;
     this.kg=kg;
     this.unit=unit;
@@ -790,9 +798,9 @@ class Price{
   }
   setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim();
+                                .trim().toLowerCase();
     this.string = tempString;
-    tempString = tempString.replace(/\$\s*|,/gm, "")
+    tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
                                 .replace(" ", ".");
     if (reg !== undefined){
         var tempMatch = tempString.match(reg)
@@ -821,6 +829,7 @@ class Website{
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
+      tempUrl = tempMatch[0]; // Lấy ra url trong đoạn text
       for (let i in WEBSITES){             
         if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
           tempUrl = tempMatch[0]; // full url
@@ -845,31 +854,31 @@ class Website{
   setDom(htmlraw){
     this.htmlraw=htmlraw;
   }
-  static async getItem(website, recentitem){
-    const iteminfo = await new Promise(resolve => {                        
-      var requestOptions = {
-          method: "GET",
-          url: website.url,
-          gzip: true,
-          jar: true
-      };
-      // Nếu website cần Cookie thì set
-      if (website.att.COOKIE !== undefined){
-          var cookie = request.cookie(website.att.COOKIE);
-          requestOptions.headers = {
-              'Cookie' : cookie,
-              'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-          };
-      }
-      request(requestOptions, function(error, response, body) {
-          // Đưa html raw vào website
-          website.setDom(body);  
-          var item = new Item(website, recentitem);
-          resolve(item);
-      });  
-    })
-    // trả về Item type, tùy vào nhu cầu sẽ lấy item.toText() hoặc item.toFBResponse()
-    return iteminfo;
+  static async getItem(website, recentitem){                     
+    var requestOptions = {
+        method: "GET",
+        url: website.url,
+        gzip: true,
+        jar: true
+    };
+    // Nếu website cần Cookie thì set
+    if (website.att.COOKIE !== undefined){
+        var cookie = request.cookie(website.att.COOKIE);
+        requestOptions.headers = {
+            'Cookie' : cookie,
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+        };
+    }
+    try {
+      const body = await request(requestOptions);
+      // Đưa html raw vào website
+      website.setDom(body);
+      var item = new Item(website, recentitem);
+      return item;
+    }
+    catch (err) {
+      return null;
+    }
   }
   static getAvailableWebsite(){
     var listweb = "";
@@ -892,10 +901,12 @@ class Item{
         var myparser = new Parser(dom);
 
         var price=new Price();
+        // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK);
           price.setPrice(priceString);          
         }
+        // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
         else if (website.att.JSONBLOCK!==undefined){
           var priceString = myparser.getJSON(website.att.JSONBLOCK); 
           price.setPrice(priceString);
@@ -917,7 +928,10 @@ class Item{
 
         var weight = new Weight();
         var category=new Category();
-        if (recentitem!==undefined){ // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
+
+        // recentitem chỉ có khi vào trang redirect rồi
+        if (recentitem!==undefined){ 
+          // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
           if (recentitem.weight.kg!==0)
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
@@ -930,7 +944,7 @@ class Item{
           weight.setWeight(detailArray,website.att.WEIGHTCONDITION);          
           category.setCategory(detailArray, website.att.CATEGORYCONDITION); 
         }
-        else{
+        else{ // các trang thông thường sẽ có category nằm riêng, weight nằm riêng
           if (website.att.CATEGORYBLOCK!==undefined){
             var categoryString = myparser.getTextArray(website.att.CATEGORYBLOCK);
             category.setCategory(categoryString); 
@@ -998,7 +1012,7 @@ class Item{
     let logContent =`
 URL : ${this.weburl}
 PRICE : ${this.price.string}
-SHIPPING : ${this.shipping.string}
+SHIPPING : ${this.shipping.value} ~ ${this.shipping.string}
 WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
 CATEGORY : ${this.category.att.ID}
 TOTAL : ${this.totalString}
@@ -1038,7 +1052,9 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  
   // Xuất ra json theo format response của FB
+  // Dùng để auto reply
   // badgeImageUrl là hình cover của response
   toFBResponse(badgeImageUrl){  
     var response;
@@ -1097,11 +1113,54 @@ CATEGORYSTRING : ${this.category.string}`;
     }
     return response;
   }
+  // Xuất ra json theo format response của FB
+  // Dùng để gửi admin duyệty
+  // gửi thông tin báo giá kèm theo button cho phép trả lời nhanh
+  toFBAdmin(senderid,sendername){  
+    var response;
+    let responseContent =`${sendername} gửi link ${this.weburl}
+- Giá web: ${this.price.string}`;
+    if (this.shipping.value>0) {
+    responseContent += `
+- Ship: ${this.shipping.value}`;
+    }
+    if ((this.weight.kg===0 && this.category.att.SHIP!==0) || this.category.att.ID==='UNKNOWN'){
+      responseContent += "\n- Chưa có cân nặng";
+    }
+    else
+      responseContent += `
+- Cân: ${this.weight.kg}kg
+- Mặt hàng ${this.category.att.NAME}`;
+    let payloadContent_1=`send|${senderid}|Dạ giá sp này là ${this.totalString}`;
+    let payloadContent_2=`send|${senderid}|Cái này là ${this.totalString}`;
+    response =  {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type":"button",
+          "text":responseContent,
+          "buttons":[
+            {
+              "type":"postback",
+              "payload": payloadContent_1,
+              "title": "Dạ, " + this.totalString
+            },
+            {
+              "type":"postback",
+              "payload": payloadContent_2,
+              "title": "Cái này " + this.totalString
+            }
+          ]
+        }
+      }
+    }  
+    return response;
+  }
   // chuyển giá (float)price sang VND theo RATE, thêm đơn vị VND
   toVND(price){    
     var rate=this.webatt.RATE!==undefined?RATE[this.webatt.RATE]:RATE['USD'];
     var priceNew = Math.ceil((price * rate) / 5000) * 5000; //Làm tròn lên 5000 
-    return priceNew.formatMoney(0, '.', ',')+" VND"; // Thêm VND vào
+    return priceNew.formatMoney(0, ',', '.')+"đ"; // Thêm VND vào
   }
 }
 module.exports.Website=Website;
