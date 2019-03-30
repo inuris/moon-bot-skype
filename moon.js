@@ -376,13 +376,23 @@ const WEBSITES = {
             ]
     } 
   },
+  DOLLSKILL:{
+    TAX: 0,
+    MATCH: "dollskill.com",
+    NAME: "DollSkill",
+    SILENCE: false,
+    PRICEBLOCK:[
+      '.price-usd .special-price',
+      '.price-usd .price'
+    ]
+  },
   FOREVER21: {
     TAX: 0,
     MATCH: "forever21.com",
     NAME: "Forever21",
     SILENCE: false,
     JSONBLOCK:{
-      SELECTOR:'script[type="application/ld+json"]',
+      INDEX: 29,
       PATH: ["$.Offers.price"]
     } 
   },
@@ -442,7 +452,7 @@ const WEBSITES = {
     TAX: 0,
     MATCH: "jomashop.com",
     NAME: "JomaShop",
-    SILENCE: false,
+    SILENCE: true,
     COOKIE:"bounceClientVisit355v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AVgPYC2AhinFRGQMa1EICWKKVCAWmJ0ErOAIQAGABwBWACy4A7AEYVktZMllENMCAA0IAE4wQpYpVoMmLdjRABfIA; _vuid=d11ab39c-b372-43e3-ad8d-3617c5cb6d4e; D_HID=62B7A346-4058-3C77-8CB7-ED51A5943914; D_IID=A74F366D-F291-329B-8AE3-695F6EBA958A; D_SID=115.77.169.59:WASVmq9DjNjsYYd7Yje++3y4C70jD9sz5J1mpazEagA; D_UID=CDF9689C-0487-3CF1-80E9-F81FCB40B168; D_ZID=F7698C1E-15E4-32FF-807F-C52EA2BA8BF2; D_ZUID=862AEB79-2FF9-382C-B620-D920270D33BD; gateCpc=[%22first_cpc%22]; gateNonDirect=[%22first_cpc%22]; tracker_device=8e55fcc1-53aa-4815-8985-04a6011b9886;",
     JSONBLOCK:{
       SELECTOR: '#xitem-primary-json',
@@ -454,7 +464,7 @@ const WEBSITES = {
   NINEWEST: {
     TAX: 0.083,
     MATCH: "ninewest.com",
-    SILENCE: false
+    SILENCE: true
   },
   OSHKOSH: {
     TAX: 0.083,
@@ -487,7 +497,7 @@ const WEBSITES = {
   THEBODYSHOP: {
     TAX: 0,
     MATCH: "thebodyshop.com",
-    SILENCE: false,
+    SILENCE: true,
     PRICEBLOCK:[
       '.current-price',
       '.price-wrapper'
@@ -496,7 +506,12 @@ const WEBSITES = {
   WALGREENS: {
     TAX: 0.083,
     MATCH: "walgreens.com",
-    SILENCE: false
+    NAME: "Walgreens",
+    SILENCE: false,
+    PRICEBLOCK: [
+      "#sales-price-info",
+      "#regular-price-info"
+    ]
   },
   WALMART: {
     TAX: 0,
@@ -589,7 +604,6 @@ class Parser{
       if (jsonblock.SELECTOR!==undefined)
         selector = jsonblock.SELECTOR;
       var scriptBlock = select(this.dom, selector);
-      if (scriptBlock === null) return "";
       var currentBlock;
       // Nếu web có <script> chứa JSON có index cố định thì set INDEX trong db để lấy đúng cái block[index] đó
       if (jsonblock.INDEX !==undefined && jsonblock.INDEX < scriptBlock.length){
@@ -605,9 +619,8 @@ class Parser{
           }
         }
       }
-      else{
-        // Mặc định lấy scriptBlock đầu tiên (thường dùng selector sẽ chỉ ra 1 block)
-        currentBlock = htmlparser.DomUtils.getText(scriptBlock[0]);
+      else {
+        return "";
       }
       // Nếu trong <script> ko phải JSON chuẩn thì phải dùng regex lấy phần JSON ra
       if (jsonblock.REGEX !== undefined){
@@ -615,7 +628,7 @@ class Parser{
         if (matchhtml.length>0)
           currentBlock = matchhtml[0];
       }
-      //console.log(currentBlock);  
+
       var json = JSON.parse(currentBlock);
       // Có nhiều Path để lấy các trường hợp giá Sale/giá Thường có path khác nhau
       for (let i=0;i<jsonblock.PATH.length;i++){
@@ -655,10 +668,11 @@ class Parser{
   getText(blockElementArray, index = 0){
     try{    
       for (let i = 0; i < blockElementArray.length; i++) {          
-          var text = select(this.dom, blockElementArray[i]);
-          //console.log(htmlparser.DomUtils.getText(text));
-          if (text.length>index) {        
-            return htmlparser.DomUtils.getText(text[index]);
+          var text = select(this.dom, blockElementArray[i]);   
+          if (text.length>index) {
+            var trimmedtext=htmlparser.DomUtils.getText(text[index]).trim();
+            if (trimmedtext.length>0)
+              return htmlparser.DomUtils.getText(text[index]);
           }
       }
       return "";
@@ -798,7 +812,7 @@ class Price{
   }
   setPrice(priceString, reg){    
     var tempString = priceString.replace(/\s+/gm," ")
-                                .trim().toLowerCase();
+                                .trim().toLowerCase();    
     this.string = tempString;
     tempString = tempString.replace(/\$\s*|.*free shipping.*/gm, "")
                                 .replace(" ", ".");
