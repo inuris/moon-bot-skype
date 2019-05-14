@@ -1027,11 +1027,10 @@ class Item{
   toLog(){
     let logContent =`
 URL : ${this.weburl}
-PRICE : ${this.price.string}
+PRICE : ${this.price.string} ~ ${this.totalString}
 SHIPPING : ${this.shipping.value} ~ ${this.shipping.string}
 WEIGHT : ${this.weight.string} ~ ${this.weight.kg}kg
 CATEGORY : ${this.category.att.ID}
-TOTAL : ${this.totalString}
 CATEGORYSTRING : ${this.category.string}`;
     let logType='success';
     if (this.webatt.DETAILBLOCK!== undefined){
