@@ -33,19 +33,17 @@ class MyBot {
                 var website= new Website(turnContext.activity.text);
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
-                    await Website.getItem(website).then((item) =>{
-                        var log=item.toLog();
-                        if (log.type==="error") logger.error(log.content);
-                        else logger.success(log.content);
+                    await Website.getItem(website).then(async (item) =>{
+                        logToDiscord(item.toLog());
+
                         // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
                         if (item.price.value==0 && item.redirect!=="")
                         {
                             console.log("Found redirect");
                             website= new Website(item.redirect);
-                            Website.getItem(website, item).then((item) =>{
-                              log=item.toLog();
-                              if (log.type==="error") logger.error(log.content);
-                              else logger.success(log.content);
+                            await Website.getItem(website, item).then((redirectitem) =>{
+                                item = redirectitem;
+                                logToDiscord(redirectitem.toLog());
                             })
                         }
                         return turnContext.sendActivity(item.toText());     
@@ -58,6 +56,17 @@ class MyBot {
     };
     
     
+}
+
+// log vào Discord theo log.type
+function logToDiscord(log, title){
+    let logContent=log.content;
+    if (title)
+        logContent = title+logContent;
+    if (log.type==="error")
+        logger.error(logContent);
+    else
+        logger.success(logContent);
 }
 
 module.exports.MyBot = MyBot;
