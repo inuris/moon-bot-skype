@@ -896,6 +896,7 @@ class Website{
       return null;
     }
   }
+  
   static getAvailableWebsite(){
     var listweb = "";
     for (let web in WEBSITES){             
@@ -944,7 +945,7 @@ class Item{
 
         var weight = new Weight();
         var category=new Category();
-
+        var recenturl;
         // recentitem chỉ có khi vào trang redirect rồi
         if (recentitem!==undefined){ 
           // Nếu đã có thông tin ở trang trước thì ko cần lấy thông tin ở trang redirect
@@ -952,6 +953,8 @@ class Item{
             weight = recentitem.weight;
           if (recentitem.category.string!==0)
             category = recentitem.category;
+          if (recentitem.weburl !=="")
+            website.url = recentitem.weburl;
         }
         // Nếu cần lấy Category & Weight từ chung 1 data table thì define DETAILBLOCK
         else if (website.att.DETAILBLOCK!==undefined){
@@ -970,6 +973,7 @@ class Item{
             weight.setWeight(weightString); 
           }
         }
+        
         this.weburl = website.url;
         this.webatt = website.att; // Thuế tại Mỹ của từng web
         
