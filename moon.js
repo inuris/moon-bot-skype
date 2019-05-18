@@ -543,8 +543,9 @@ const WEBSITES = {
     NAME: "ZeroUV",
     SILENCE: false,
     PRICEBLOCK:[
-      '.current_price'
-    ]
+      ".current_price"
+    ],
+    CATEGORYBLOCK:[".product_links"]
   },
 };
 
@@ -674,10 +675,11 @@ class Parser{
   getText(blockElementArray, index = 0){
     try{    
       for (let i = 0; i < blockElementArray.length; i++) {          
-          var text = select(this.dom, blockElementArray[i]);
-          //console.log(htmlparser.DomUtils.getText(text));
-          if (text.length>index) {        
-            return htmlparser.DomUtils.getText(text[index]);
+          var text = select(this.dom, blockElementArray[i]);   
+          if (text.length>index) {
+            var trimmedtext=htmlparser.DomUtils.getText(text[index]).trim();
+            if (trimmedtext.length>0)
+              return htmlparser.DomUtils.getText(text[index]);
           }
       }
       return "";
