@@ -1,5 +1,3 @@
-"use strict"
-// modify from facebook
 const select = require("soupselect-update").select;
 const htmlparser = require("htmlparser2");
 const request = require("request-promise");
@@ -287,6 +285,13 @@ const CATEGORIES = {
     NOTKEYWORD: []
   }
 };
+const IGNORE_WEBSITES=[
+  "zara.com/es",
+  "ebay.com",
+  "victoriassecret.com",
+  "urbanoutfitters.com",
+  "ruelala.com"
+]
 const WEBSITES = {
   AMAZON3RD:{
     TAX: 0.083,
@@ -484,7 +489,7 @@ const WEBSITES = {
       INDEX: 29,
       PATH: ["$.Offers.price"]
     } 
-  },
+  },  
   SKIPHOP: {
     TAX: 0.083,
     MATCH: "skiphop.com",
@@ -532,16 +537,15 @@ const WEBSITES = {
       PATH: ["$[0].offers.price"]
     }
   },
-  // ZARAES:{
-  //   TAX: 0,
-  //   RATE: 'EUR',
-  //   MATCH: "zara.com/es",
-  //   SILENCE: false,
-  //   JSONBLOCK:{
-  //     INDEX: 16,
-  //     PATH: ["$[0].offers.price"]
-  //   }
-  // }
+  ZEROUV: {
+    TAX: 0.083,
+    MATCH: "shopzerouv.com",
+    NAME: "ZeroUV",
+    SILENCE: false,
+    PRICEBLOCK:[
+      '.current_price'
+    ]
+  },
 };
 
 // Chuyển đổi dạng Number ra Currency: 1200000 => 1,200,000
@@ -842,30 +846,33 @@ class Website{
     var tempWeb = null;
     var tempUrl = "";
     var tempDomain="";
+    // Kiểm tra trong text có URL ko
     var tempMatch = url.match(reg); 
     if (tempMatch!==null){
       isUrl=true;
       tempUrl = tempMatch[0]; // Lấy ra url trong đoạn text
-      for (let i in WEBSITES){             
-        if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
-          tempUrl = tempMatch[0]; // full url
-          tempDomain = tempMatch[1]; // chỉ có domain
-          if (tempDomain.indexOf('http')!==0)
-            tempDomain="https://"+tempDomain;
-          tempWeb = WEBSITES[i];
-          break;
-        }          
+      if (tempMatch[0].checkKeyword(IGNORE_WEBSITES) === false){
+        for (let i in WEBSITES){             
+          if(tempMatch[0].indexOf(WEBSITES[i].MATCH)>=0){
+            tempUrl = tempMatch[0]; // full url
+            tempDomain = tempMatch[1]; // chỉ có domain
+            if (tempDomain.indexOf('http')!==0)
+              tempDomain="https://"+tempDomain;
+            tempWeb = WEBSITES[i];
+            break;
+          }          
+        }
       }
     }
     if (tempWeb!==null){
       found = true;            
     }
-    this.domain = tempDomain;  // chỉ có domain
-    this.url=tempUrl;  // full url
-    this.isUrl=isUrl; // true false
-    this.att=tempWeb; // các thuộc tính của WEBSITES
-    this.htmlraw="";
-    this.found = found;  
+    this.domain =  tempDomain;  // chỉ có domain
+    this.url    =  tempUrl;     // full url
+    this.isUrl  =  isUrl;       // true false
+    this.att    =  tempWeb;     // các thuộc tính lấy từ WEBSITES
+    this.htmlraw=  "";
+    this.found  =  found;       // true false: có tìm thấy đúng website trong list hay ko
   }
   setDom(htmlraw){
     this.htmlraw=htmlraw;
@@ -875,15 +882,12 @@ class Website{
         method: "GET",
         url: website.url,
         gzip: true,
-        jar: true
+        jar: true,
+        headers:{'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
     };
     // Nếu website cần Cookie thì set
     if (website.att.COOKIE !== undefined){
-        var cookie = request.cookie(website.att.COOKIE);
-        requestOptions.headers = {
-            'Cookie' : cookie,
-            'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-        };
+        requestOptions.headers.cookie = request.cookie(website.att.COOKIE)
     }
     try {
       const body = await request(requestOptions);
@@ -893,7 +897,7 @@ class Website{
       return item;
     }
     catch (err) {
-      return null;
+      return err;
     }
   }
   
@@ -921,6 +925,7 @@ class Item{
         // Tìm giá trên HTML (có priceBlock)
         if (website.att.PRICEBLOCK!==undefined){
           var priceString = myparser.getText(website.att.PRICEBLOCK);
+          //console.log(priceString);
           price.setPrice(priceString);          
         }
         // Tìm giá trên JSON (ko có priceBlock, chỉ có JSONBlock)
