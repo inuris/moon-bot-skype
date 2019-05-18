@@ -33,7 +33,8 @@ class MyBot {
                 var website= new Website(turnContext.activity.text);
                 // Nếu có trong list website thì mới trả lời
                 if (website.found === true){
-                    await Website.getItem(website).then(async (item) =>{
+                    await Website.getItem(website)
+                      .then(async (item) =>{
                         logToDiscord(item.toLog());
 
                         // Nếu ko lấy được giá thì có thể là 3rd Seller (Amazon)
@@ -41,13 +42,20 @@ class MyBot {
                         {
                             console.log("Found redirect");
                             website= new Website(item.redirect);
-                            await Website.getItem(website, item).then((redirectitem) =>{
+                            await Website.getItem(website, item)
+                              .then((redirectitem) =>{
                                 item = redirectitem;
                                 logToDiscord(redirectitem.toLog());
-                            })
+                              })
+                              .catch(e=>{
+                                console.log(e);
+                              })
                         }
                         return turnContext.sendActivity(item.toText());     
-                    })              
+                      })
+                      .catch(e=>{
+                        console.log(e);
+                      })
                 }
                 else if (website.isUrl === true)
                     return turnContext.sendActivity("Xin lỗi, Moon chỉ hỗ trợ báo giá các web sau: " + Website.getAvailableWebsite()); 
