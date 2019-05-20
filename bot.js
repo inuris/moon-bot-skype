@@ -13,7 +13,6 @@ const logger = new DiscordLogger(options);
 const Website = require("./core/moon.js").Website;
 
 // Imports dependencies and set up http server
-
 class MyBot {
     /**
      *
