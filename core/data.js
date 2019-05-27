@@ -225,7 +225,7 @@ const CATEGORIES = {
     NAME: "Phụ kiện xe hơi",
     NOTE: "Phí ship $11/kg",
     KEYWORD: ["> wheels & tires >",
-             "> engine & chassis parts"],
+         "> engine & chassis parts"],
     NOTKEYWORD: []
   },
   MILK: {
