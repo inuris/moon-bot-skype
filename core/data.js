@@ -197,11 +197,10 @@ const CATEGORIES = {
       "kids",
       "learning",
       "education",
-      "audio & video accessories",
+      "accessories",
       "screen protectors",
       "cases",
       "bags",
-      "camera & photo accessories",
       "accessory kits",
       "cables",
       "holder",
@@ -211,7 +210,8 @@ const CATEGORIES = {
       "repair kits",
       "sticks",
       "tripods",
-      "styluses"
+      "styluses",
+			'screwdrivers'
     ]
   },
   AUTOMOTIVE: {
@@ -393,6 +393,7 @@ const WEBSITES = {
     NAME: "Forever21",
     SILENCE: false,
     JSONBLOCK:{
+      INDEX: 1,
       SELECTOR:'script[type="application/ld+json"]',
       PATH: ["$.Offers.price"]
     } 
